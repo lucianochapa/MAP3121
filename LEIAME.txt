@@ -1,0 +1,53 @@
+Instruções de uso:
+-Para executar o programa, o diretório deve manter a estrutura interna.
+-Abrir o arquivo 'main.py'
+
+######################################################################################################
+
+Arquivos e descrições
+
+######################################################################################################
+
+'./requirements/'
+-Descrição
+--Contém uma lista dos pacotes e versões instalados
+
+'requirements.txt'
+-Descrição
+--Contém a lista de pacotes instalados para ambiente virtual (dir './envs')
+
+'bio-env.txt'
+-Descrição
+--Pode ser usado para criar um ambiente Conda já instalando as dependências necessárias
+
+######################################################################################################
+
+'./envs/'
+-Descrição
+--Contém os arquivos instalados de ambiente virtual
+
+######################################################################################################
+
+'main.py'
+
+-Descrição
+--Executa a UI para receber o usuário e selecionar o modo desejado
+--Uma vez escolhida a funcionalidade, chama outro script (incluído no diretório 'functions/')
+--Executa o script adequado, retorna as informações pertinentes, e volta ao menu de início
+--Termina quando o usuário escolhe encerrar
+
+-Dependências:
+--'functions/'
+
+######################################################################################################
+'./functions/'
+
+'lu_decomp.py'
+-Descrição
+--Contém o script para decomposição LU de matrizes
+
+'solve_tridi.py'
+-Descrição
+--Contém o script para resolver sistemas tridiagonais usando decomposição LU
+
+######################################################################################################
