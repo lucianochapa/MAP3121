@@ -11,7 +11,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "pythonPath": "${workspaceRoot}\\envs\\python.exe"
+            "python": "${workspaceRoot}\\envs\\python.exe"
         }
     ]
 }
