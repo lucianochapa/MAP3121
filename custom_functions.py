@@ -1,7 +1,7 @@
 import numpy as np
 
-def decompLU(A):        # Recebe uma matriz A e executa sua decomposição LU
-    '''Recebe uma matriz A ndarray e devolve a matriz e sua decomposição LU (como tripla A,L,U)
+def decompLU(A):        # Recebe uma matriz A (ndarray) e executa sua decomposição LU
+    '''Recebe uma matriz A ndarray e devolve sua decomposição LU (como tupla L,U)
     
     Keyword arguments:
     A -- ndarray: a matriz quadrada que se deseja decompor
@@ -12,7 +12,7 @@ def decompLU(A):        # Recebe uma matriz A e executa sua decomposição LU
     L = [[0] * n for i in range(0,n)]                           # Cria matriz L (n x n) com zeros em todas as posições
     for i in range(0,n):                                        # Itera para todas as linhas
         L[i][i] = 1                                             # Todos os elementos da diagonal viram 1
-    L = np.array(L)                                             # Transforma a lista em nfdarray
+    L = np.array(L)                                             # Transforma a lista em ndarray
     U = [[0] * n for i in range(0,n)]                           # Cria matriz U (n x n) com zeros em todas as posições
     U = np.array(U)                                             # Transforma a lista em ndarray
 
@@ -32,7 +32,7 @@ def decompLU(A):        # Recebe uma matriz A e executa sua decomposição LU
     print("U: ")                                                # Imprime a matriz U (superior)
     print(U)                                                    # Imprime a matriz U (superior)
 
-    return A,L,U
+    return L,U
 
 def recebeA():          # Pede ao usuário os parâmetros da matriz A a ser decomposta
     '''Recebe do teclado do usuário o tamanho 'n' da matriz A e seus elementos um a um.
@@ -50,5 +50,57 @@ def recebeA():          # Pede ao usuário os parâmetros da matriz A a ser deco
         A.append(linha)                                                 # Add o vetor linha à matriz A
     return np.array(A)                                                            # Devolve a matriz como lista
 
-def solveTridi():
-    print("Rodar script para resolver sistema aqui")
+def solveTridi(a,b,c,d):
+    '''Resolve um sistema linear tridiagonal A*x = d utilizando uma decomposição LU --> LUx = d
+
+    a --ndarray: um vetor contendo a subdiagonal dos coeficientes de x, de tamanho n
+    b --ndarray: um vetor contendo a diagonal dos coeficientes de x, de tamanho n
+    c --ndarray: um vetor contendo a sobrediagonal dos coeficientes de x, de tamanho n
+    d --ndarray: um vetor dos coeficientes independentes do sistema, de tamanho n
+    '''    
+    a = np.array(a)
+    b = np.array(b)
+    c = np.array(c)
+    d = np.array(d)
+    L, U = tridiDecompLU(a,b,c)
+    n = len(d)
+    y = [0 for i in range(0,n)]
+    y[0] = d[0]
+    for i in range(1,n):
+        y[i] = d[i] - L[i]*y[i-1]   
+    x = [0 for i in range(0,n)]
+    x[n-1] = y[n-1]*U[n-1]
+    for i in range(n-2,-1,-1):
+        x[i] = (y[i] - c[i]*x[i+1])/U[i]
+    x = np.array(x)
+    return x
+
+def tridiDecompLU(a,b,c):
+    n = len(a)
+    L = [0 for i in range(0,n)]
+    U = [0 for i in range(0,n)]
+    L = np.array(L)
+    U = np.array(U)
+
+    U[0]=b[0]
+    for i in range(1,n):
+        L[i] = a[i]/U[i-1]
+        U[i] = b[i] - L[i]*c[i-1]
+    
+    # print(L)
+    # print(U)
+
+    return L, U
+
+def solveLUx(L,U,c,d):
+    n = len(d)
+    y = [0 for i in range(0,n)]
+    y[0] = d[0]
+    for i in range(1,n):
+        y[i] = d[i] - L[i]*y[i-1]   
+    x = [0 for i in range(0,n)]
+    x[n-1] = y[n-1]*U[n-1]
+    for i in range(n-2,-1,-1):
+        x[i] = (y[i] - c[i]*x[i+1])/U[i]
+    x = np.array(x)
+    return x

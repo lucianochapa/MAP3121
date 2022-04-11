@@ -59,7 +59,12 @@ def main():
                         cf.decompLU(A)                                                              # Executa script de decomposição LU
                         break                                                                       # Quebra o laço e volta ao menu anterior
             elif(choice == 2):                                                                      # Se escolheu sistema tridi
-                cf.solveTridi()                                                                     # Executa script de resolução de sistema tridiagonal
+                a = [0,-1,-1,-1]                                                                    # Subdiagonal da matriz de coeficientes
+                b = [2,2,2,2]                                                                       # Diagonal da matriz de coeficientes
+                c = [-1,-1,-1,0]                                                                    # Sobrediagonal da matriz de coeficientes
+                d = [1,0,0,1]                                                                       # Coeficientes independentes do sistema
+                x = cf.solveTridi(a,b,c,d)                                                          # Executa script de resolução de sistema tridiagonal e guarda resultado em 'x'
+                print(x)                                                                            # Imprime 'x'
             else:                                                                                   # Se o usuário escolheu sair
                 return                                                                              # Encerra o programa
 
