@@ -1,21 +1,20 @@
 import numpy as np
 
 def decompLU(A):        # Recebe uma matriz A e executa sua decomposição LU
-    '''Recebe uma matriz A e devolve a matriz e sua decomposição LU (como tripla A,L,U)
+    '''Recebe uma matriz A ndarray e devolve a matriz e sua decomposição LU (como tripla A,L,U)
     
     Keyword arguments:
-    A -- lista contendo a matriz quadrada que se deseja decompor
+    A -- ndarray: a matriz quadrada que se deseja decompor
     '''
-    A = np.array(A)                                             # Transforma a lista em numpy.array
     print("Matriz A:")                                          # Imprime a matriz A que foi digitada pelo usuário
     print(A)                                                    # ||||||||||||||||||||||||||||||||||||||||||||||||
     n = len(A)                                                  # Guarda o tamanho da matriz A
     L = [[0] * n for i in range(0,n)]                           # Cria matriz L (n x n) com zeros em todas as posições
     for i in range(0,n):                                        # Itera para todas as linhas
         L[i][i] = 1                                             # Todos os elementos da diagonal viram 1
-    L = np.array(L)                                             # Transforma a lista em numpy.array
+    L = np.array(L)                                             # Transforma a lista em nfdarray
     U = [[0] * n for i in range(0,n)]                           # Cria matriz U (n x n) com zeros em todas as posições
-    U = np.array(U)                                             # Transforma a lista em numpy.array
+    U = np.array(U)                                             # Transforma a lista em ndarray
 
     # ------------------------------------------------------------------------------------------------------
     # 2. Método que funciona mas não deve ser usado
@@ -36,7 +35,9 @@ def decompLU(A):        # Recebe uma matriz A e executa sua decomposição LU
     return A,L,U
 
 def recebeA():          # Pede ao usuário os parâmetros da matriz A a ser decomposta
-    '''Recebe do usuário o tamanho 'n' da matriz A e seus elementos um a um'''
+    '''Recebe do teclado do usuário o tamanho 'n' da matriz A e seus elementos um a um.
+    
+    Retorna uma matriz A como ndarray'''
     n = int(input("Digite o tamanho n da matriz (quadrada, n x n): "))  # Recebe o tamanho da matriz (quadrada) n x n
     A = []                                                              # Cria lista vazia para receber os valores
     for i in range(0,n):                                                # Itera para o número n de linhas
@@ -47,7 +48,7 @@ def recebeA():          # Pede ao usuário os parâmetros da matriz A a ser deco
             linha.append(elem)                                          # Add o elemento ao final do vetor linha
         print(67 * "-")                                                 # ------------------------------------------
         A.append(linha)                                                 # Add o vetor linha à matriz A
-    return A                                                            # Devolve a matriz como lista
+    return np.array(A)                                                            # Devolve a matriz como lista
 
 def solveTridi():
-    print("a")
+    print("Rodar script para resolver sistema aqui")
