@@ -9,10 +9,9 @@
 
 # Importação de libs
 import numpy as np
-import os
 import custom_functions as cf
 # import matplotlib.pyplot as plt
-# import sys, time, datetime, math
+# import sys, time, datetime, math, os
 
 def printMenu(options, name):    # Apresenta ao usuário um menu de opções
         options[len(options)+1] = {'index':len(options)+1,'info':'Encerrar programa'}
@@ -26,8 +25,7 @@ def main():
     while True:                                                                             
         menu = {                                                                            # Cria um menu de opções como dict
             1: {'index':1,'info':'Decomposição LU de matriz'},
-            2: {'index':2,'info':'Resolução de sistema tridiagonal usando decomposição de matriz LU'},
-            # 3: {'index':3,'info':'Encerrar programa'}
+            2: {'index':2,'info':'Resolução de sistema tridiagonal usando decomposição de matriz LU'}
             }
         options = printMenu(options=menu, name="MENU")                                      # Imprime o menu e retorna um dict com as opções
         choice = int(input("Digite o número da ação desejada (1 a %i): "%(len(options))))   # Recebe do usuário uma ação do menu (int)
@@ -56,13 +54,13 @@ def main():
                             A = np.genfromtxt('matriz.csv', delimiter=',')                          # Importa os valores do csv para um ndarray
                         elif(choice == 3):                                                          # Se escolheu voltar ao menu
                             break                                                                   # Quebra o laço e volta ao menu anterior
-                        else:
-                            return
+                        else:                                                                       # Se escolheu encerrar o programa
+                            return                                                                  # Encerra o programa
                         cf.decompLU(A)                                                              # Executa script de decomposição LU
                         break                                                                       # Quebra o laço e volta ao menu anterior
             elif(choice == 2):                                                                      # Se escolheu sistema tridi
                 cf.solveTridi()                                                                     # Executa script de resolução de sistema tridiagonal
             else:                                                                                   # Se o usuário escolheu sair
-                return                                                                               # Encerra o programa
+                return                                                                              # Encerra o programa
 
 main()
