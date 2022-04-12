@@ -9,11 +9,11 @@ def decompLU(A):        # Recebe uma matriz A (ndarray) e executa sua decomposi�
     print("Matriz A:")                                          # Imprime a matriz A que foi digitada pelo usuário
     print(A)                                                    # ||||||||||||||||||||||||||||||||||||||||||||||||
     n = len(A)                                                  # Guarda o tamanho da matriz A
-    L = [[0] * n for i in range(0,n)]                           # Cria matriz L (n x n) com zeros em todas as posições
+    L = [[0]*n]*n                                               # Cria matriz L (n x n) com zeros em todas as posições
     for i in range(0,n):                                        # Itera para todas as linhas
         L[i][i] = 1                                             # Todos os elementos da diagonal viram 1
     L = np.array(L)                                             # Transforma a lista em ndarray
-    U = [[0] * n for i in range(0,n)]                           # Cria matriz U (n x n) com zeros em todas as posições
+    U = [[0]*n]*n                                               # Cria matriz U (n x n) com zeros em todas as posições
     U = np.array(U)                                             # Transforma a lista em ndarray
 
     # ------------------------------------------------------------------------------------------------------
@@ -63,22 +63,13 @@ def solveTridi(a,b,c,d):
     c = np.array(c)
     d = np.array(d)
     L, U = tridiDecompLU(a,b,c)
-    n = len(d)
-    y = [0 for i in range(0,n)]
-    y[0] = d[0]
-    for i in range(1,n):
-        y[i] = d[i] - L[i]*y[i-1]   
-    x = [0 for i in range(0,n)]
-    x[n-1] = y[n-1]*U[n-1]
-    for i in range(n-2,-1,-1):
-        x[i] = (y[i] - c[i]*x[i+1])/U[i]
-    x = np.array(x)
+    x = solveLUxd(L,U,c,d)
     return x
 
 def tridiDecompLU(a,b,c):
-    n = len(a)
-    L = [0 for i in range(0,n)]
-    U = [0 for i in range(0,n)]
+    n = len(b)
+    L = [0]*(n-1)
+    U = [0]*n
     L = np.array(L)
     U = np.array(U)
 
@@ -92,14 +83,14 @@ def tridiDecompLU(a,b,c):
 
     return L, U
 
-def solveLUx(L,U,c,d):
+def solveLUxd(L,U,c,d):
     n = len(d)
-    y = [0 for i in range(0,n)]
+    y = [0]*n
     y[0] = d[0]
     for i in range(1,n):
-        y[i] = d[i] - L[i]*y[i-1]   
-    x = [0 for i in range(0,n)]
-    x[n-1] = y[n-1]*U[n-1]
+        y[i] = d[i] - L[i]*y[i-1]
+    x = [0]*n
+    x[n-1] = y[n-1]/U[n-1]
     for i in range(n-2,-1,-1):
         x[i] = (y[i] - c[i]*x[i+1])/U[i]
     x = np.array(x)
