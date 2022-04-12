@@ -1,5 +1,6 @@
 Instruções de uso:
--Para executar o programa, o diretório deve manter a estrutura interna.
+-Rodar o programa no diretório root: 'MAP3121'
+-Para executar o programa, o diretório deve manter a estrutura interna
 -Abrir o arquivo 'main.py'
 
 ######################################################################################################
@@ -32,22 +33,16 @@ Arquivos e descrições
 
 -Descrição
 --Executa a UI para receber o usuário e selecionar o modo desejado
---Uma vez escolhida a funcionalidade, chama outro script (incluído no diretório 'functions/')
+--Uma vez escolhida a funcionalidade, roda a função adequada para resolver o problema
 --Executa o script adequado, retorna as informações pertinentes, e volta ao menu de início
 --Termina quando o usuário escolhe encerrar
 
 -Dependências:
---'functions/'
+--'custom_functions'
 
 ######################################################################################################
-'./functions/'
-
-'lu_decomp.py'
+'custom_functions.py'
 -Descrição
---Contém o script para decomposição LU de matrizes
-
-'solve_tridi.py'
--Descrição
---Contém o script para resolver sistemas tridiagonais usando decomposição LU
+--Contém todas funções utilizadas para os cálculos envolvidos no exercício-programa
 
 ######################################################################################################
