@@ -6,33 +6,23 @@ def decompLU(A):        # Recebe uma matriz A (ndarray) e executa sua decomposi�
     Keyword arguments:
     A -- ndarray: a matriz quadrada que se deseja decompor
     '''
-    print("Matriz A:")                                          # Imprime a matriz A que foi digitada pelo usuário
-    print(A)                                                    # ||||||||||||||||||||||||||||||||||||||||||||||||
-    n = len(A)                                                  # Guarda o tamanho da matriz A
-    L = [[0]*n]*n                                               # Cria matriz L (n x n) com zeros em todas as posições
-    for i in range(0,n):                                        # Itera para todas as linhas
-        L[i][i] = 1                                             # Todos os elementos da diagonal viram 1
-    L = np.array(L)                                             # Transforma a lista em ndarray
-    U = [[0]*n]*n                                               # Cria matriz U (n x n) com zeros em todas as posições
-    U = np.array(U)                                             # Transforma a lista em ndarray
-
-    # ------------------------------------------------------------------------------------------------------
-    # 2. Método que funciona mas não deve ser usado
-    for j in range(0,n):                                        # Itera para todas as colunas
-        for i in range(0,j+1):                                  # Itera para as linhas acima da diagonal
-            s1 = sum(L[i][k] * U[k][j] for k in range(0,i))     # Soma dos elementos (multiplicação de matrizes)
-            U[i][j] = A[i][j] - s1                              # Guarda o valor do(s) elementos(s) na linha i
-        for i in range(j, n):                                   # Itera para as linhas abaixo da diagonal
-            s2 = sum(U[k][j] * L[i][k] for k in range(0,j))     # Soma dos elementos (multiplicação de matrizes)
-            L[i][j] = (A[i][j] - s2) / U[j][j]                  # Guarda o valor do(s) elemento(s) na coluna j
-    # ------------------------------------------------------------------------------------------------------
-
-    print("L: ")                                                # Imprime a matriz L (inferior)
-    print(L)                                                    # Imprime a matriz L (inferior)
-    print("U: ")                                                # Imprime a matriz U (superior)
-    print(U)                                                    # Imprime a matriz U (superior)
-
-    return L,U
+    print("Matriz A:")                                                          # Imprime a matriz A que foi inserida pelo usuário
+    print(A)                                                                    # Imprime a matriz A que foi inserida pelo usuário
+    n = len(A)                                                                  # Guarda o tamanho da matriz A
+    L = [[0]*n]*n                                                               # Cria matriz L (n x n) com zeros em todas as posições
+    L = np.array(L)                                                             # Transforma a lista em ndarray
+    for i in range(0,n):                                                        # Itera para todas as linhas
+        L[i,i] = 1                                                              # Todos os elementos da diagonal viram 1
+    U = [[0]*n]*n                                                               # Cria matriz U (n x n) com zeros em todas as posições
+    U = np.array(U)                                                             # Transforma a lista em ndarray
+    for i in range(0,n):                                                        # Itera para todas as linhas
+        U[i,i:] = A[i,i:] - np.dot(L[i,:i],U[:i,i:])                            # EXPRESSÃO (1) DO EXERCÍCIO
+        L[(i+1):,i] = (1/U[i,i])*(A[(i+1):,i] - np.dot(L[(i+1):,:i],U[:i,i]))   # EXPRESSÃO (2) DO EXERCÍCIO
+    print("Matriz inferior L: ")                                                # Imprime a matriz L (inferior)
+    print(L)                                                                    # Imprime a matriz L (inferior)
+    print("Matriz superior U: ")                                                # Imprime a matriz U (superior)
+    print(U)                                                                    # Imprime a matriz U (superior)
+    return L,U                                                                  # Retorna as matrizes L e U como tupla
 
 def recebeA():          # Pede ao usuário os parâmetros da matriz A a ser decomposta
     '''Recebe do teclado do usuário o tamanho 'n' da matriz A e seus elementos um a um.
