@@ -13,19 +13,28 @@ import custom_functions as cf
 # import matplotlib.pyplot as plt
 # import sys, time, datetime, math, os
 
-def printMenu(options, name):    # Apresenta ao usuário um menu de opções
-        options[len(options)+1] = {'index':len(options)+1,'info':'Encerrar programa'}
-        print(name, (66 - len(name))*"-")                                               # MENU--------------------------------------------
-        for i in options:                                                               # Itera nas opções do menu
-            print("%s. %s"%(options[i]['index'],options[i]['info']))                    # Imprime o número e descrição da opção
-        print(67 * "-")                                                                 # ------------------------------------------------
-        return options                                                                  # Retorna o dict 'options'
+def printMenu(options: dict, name:str):
+    '''Imprime um menu de opções no terminal
+
+    Parâmetros
+    ===
+    options: dict
+        Um dicionário contendo o índice e descrição de cada opção
+    name: str
+        Nome do menu exibido no topo
+    '''
+    options[len(options)+1] = 'Encerrar programa'
+    print(name, (max(0,66 - len(name)))*"-")                            # MENU--------------------------------------------
+    for i in options:                                                   # Itera nas opções do menu
+        print("%s. %s"%(i,options[i]))                                  # Imprime o número e descrição da opção
+    print(67 * "-")                                                     # ------------------------------------------------
+    return options                                                      # Retorna o dict 'options'
 
 def main():
     while True:                                                                             
         menu = {                                                                            # Cria um menu de opções como dict
-            1: {'index':1,'info':'Decomposição LU de matriz'},
-            2: {'index':2,'info':'Resolução de sistema tridiagonal usando decomposição de matriz LU'}
+            1: 'Decomposição LU de matriz',
+            2: 'Resolução de sistema tridiagonal usando decomposição de matriz LU'
             }
         options = printMenu(options=menu, name="MENU")                                      # Imprime o menu e retorna um dict com as opções
         choice = int(input("Digite o número da ação desejada (1 a %i): "%(len(options))))   # Recebe do usuário uma ação do menu (int)
@@ -33,17 +42,17 @@ def main():
         except KeyError:                                                                    # Se não for, mantém o laço e retorna ao menu
             print("Opção não disponível. Escolha a ação desejada do menu abaixo: ")         # Imprime mensagem de erro
         else:                                                                               # Se for válida
-            print("Opção escolhida: %s"%(options[choice]['info']))                          # Imprime a descrição da ação escolhida
+            print("Opção escolhida: %s"%(options[choice]))                                  # Imprime a descrição da ação escolhida
             if(choice == 1):                                                                # Se escolheu decomp LU
                 while True:
-                    entradas = {                                                                    # Cria um menu de opções como dict
-                        1: {'index':1,'info':'Digitar elementos um a um'},
-                        2: {'index':2,'info':'Escolher de um arquivo'},
-                        3: {'index':3,'info':'Voltar'}
+                    entradas = {                                                            # Cria um menu de opções como dict
+                        1: 'Digitar elementos um a um',
+                        2: 'Escolher de um arquivo',
+                        3: 'Voltar'
                         }
                     options = printMenu(options=entradas, name="MÉTODO DE ENTRADA")                 # Imprime o menu e retorna um dict com as opções
                     choice = int(input("Escolha um método de entrada (1 a %i): "%(len(options))))   # Recebe do usuário uma ação do menu (int)
-                    print("Opção escolhida: %s"%(options[choice]['info']))                          # Imprime a descrição da ação escolhida
+                    print("Opção escolhida: %s"%(options[choice]))                                  # Imprime a descrição da ação escolhida
                     try: options[choice]                                                            # Verifica se a opção é válida
                     except KeyError:                                                                # Se não for, mantém o laço e retorna ao menu
                         print("Opção não disponível. Escolha um método do menu abaixo: ")           # Imprime mensagem de erro

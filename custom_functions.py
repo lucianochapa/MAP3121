@@ -1,10 +1,19 @@
 import numpy as np
 
-def decompLU(A):        # Recebe uma matriz A (ndarray) e executa sua decomposição LU
-    '''Recebe uma matriz A ndarray e devolve sua decomposição LU (como tupla L,U)
+def decompLU(A: np.ndarray):    # Recebe uma matriz A (ndarray) e executa sua decomposição LU
+    '''Recebe uma matriz A e devolve sua decomposição LU
     
-    Keyword arguments:
-    A -- ndarray: a matriz quadrada que se deseja decompor
+    Parâmetros
+    ===
+    A: ndarray
+        A matriz quadrada que se deseja decompor
+
+    Retorna
+    ===
+    tuple [
+        L: ndarray - matriz inferior,
+        U: ndarray - matriz superior
+            ]
     '''
     print("Matriz A:")                                                          # Imprime a matriz A que foi inserida pelo usuário
     print(A)                                                                    # Imprime a matriz A que foi inserida pelo usuário
@@ -24,29 +33,34 @@ def decompLU(A):        # Recebe uma matriz A (ndarray) e executa sua decomposi�
     print(U)                                                                    # Imprime a matriz U (superior)
     return L,U                                                                  # Retorna as matrizes L e U como tupla
 
-def recebeA():          # Pede ao usuário os parâmetros da matriz A a ser decomposta
+def recebeA():                  # Pede ao usuário os parâmetros da matriz A a ser decomposta
     '''Recebe do teclado do usuário o tamanho 'n' da matriz A e seus elementos um a um.
     
-    Retorna uma matriz A como ndarray'''
-    n = int(input("Digite o tamanho n da matriz (quadrada, n x n): "))  # Recebe o tamanho da matriz (quadrada) n x n
-    A = []                                                              # Cria lista vazia para receber os valores
-    for i in range(0,n):                                                # Itera para o número n de linhas
-        linha = []                                                      # Cria lista vazia para vetor linha
-        print("Linha %i"%(i+1))                                         # Mostra ao usuário a linha atual
-        for j in range(0,n):                                            # Itera para o número n de colunas
-            elem = int(input("A(%i,%i): "%(i+1,j+1)))                   # Recebe o elemento A[i][j]
-            linha.append(elem)                                          # Add o elemento ao final do vetor linha
-        print(67 * "-")                                                 # ------------------------------------------
-        A.append(linha)                                                 # Add o vetor linha à matriz A
-    return np.array(A)                                                            # Devolve a matriz como lista
+    Retorna
+    ====
+    A: ndarray
+        Matriz formada pelas inserções do usuário
+        '''
+    n = int(input("Digite o tamanho n da matriz (quadrada, n x n): "))      # Recebe o tamanho da matriz (quadrada) n x n
+    A = []                                                                  # Cria lista vazia para receber os valores
+    for i in range(0,n):                                                    # Itera para o número n de linhas
+        print("Linha %i"%(i+1))                                             # Mostra ao usuário a linha atual
+        A.append([int(input("A(%i,%i): "%(i+1,j+1))) for j in range(0,n)])  # Pede e concatena à lista o próximo valor
+    return np.array(A)                                                      # Devolve a matriz como np.ndarray
 
-def solveTridi(a,b,c,d):
+def solveTridi(a: np.ndarray, b: np.ndarray, c: np.ndarray, d: np.ndarray):
     '''Resolve um sistema linear tridiagonal A*x = d utilizando uma decomposição LU --> LUx = d
 
-    a --ndarray: um vetor contendo a subdiagonal dos coeficientes de x, de tamanho n
-    b --ndarray: um vetor contendo a diagonal dos coeficientes de x, de tamanho n
-    c --ndarray: um vetor contendo a sobrediagonal dos coeficientes de x, de tamanho n
-    d --ndarray: um vetor dos coeficientes independentes do sistema, de tamanho n
+    Parâmetros
+    ===
+    a: ndarray
+        Vetor contendo a subdiagonal dos coeficientes de X, de tamanho n
+    b: ndarray
+        Vetor contendo a diagonal dos coeficientes de X, de tamanho n
+    c: ndarray
+        Vetor contendo a sobrediagonal dos coeficientes de X, de tamanho n
+    d: ndarray
+        Vetor dos coeficientes independentes do sistema, de tamanho n
     '''    
     a = np.array(a)
     b = np.array(b)
