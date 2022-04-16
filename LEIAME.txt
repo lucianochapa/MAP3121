@@ -1,5 +1,5 @@
 Instruções de uso:
--Rodar o programa no diretório root: 'MAP3121'
+-Rodar o programa do diretório root: 'MAP3121'
 -Para executar o programa, o diretório deve manter a estrutura interna
 -Abrir o arquivo 'main.py'
 
