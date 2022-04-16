@@ -8,8 +8,8 @@
 
 
 # Importação de libs
-import numpy as np
-import custom_functions as cf
+import numpy as np, custom_functions as cf, tkinter
+from tkinter import filedialog
 # import matplotlib.pyplot as plt
 # import sys, time, datetime, math, os
 
@@ -37,91 +37,185 @@ def main():
             2: 'Resolução de sistema tridiagonal usando decomposição de matriz LU'
             }
         options = printMenu(options=options, name="MENU PRINCIPAL")                                 # Imprime o menu e retorna um dict com as opções
-        choice = int(input("Digite o número da ação desejada (1 a %i): "%(len(options))))           # Recebe do usuário uma ação do menu (int)
-        try: options[choice]                                                                        # Verifica se a opção é válida
-        except KeyError:                                                                            # Se não for, mantém o laço e retorna ao menu
-            print("Opção não disponível. Escolha a ação desejada do menu abaixo: ")                 # Imprime mensagem de erro
-        else:                                                                                       # Se for válida
-            print("Opção escolhida: %s"%(options[choice]))                                          # Imprime a descrição da ação escolhida
-            if(choice == 1):                                                                        # Se escolheu decomp LU
-                while True:                                                                         # Abre um laço e um nível de menu
-                    options = {                                                                     # Cria um menu de opções como dict
-                        1: 'Digitar elementos um a um',
-                        2: 'Escolher de um arquivo',
-                        3: 'Voltar'
-                        }
-                    options = printMenu(options=options, name="MÉTODO DE ENTRADA")                  # Imprime o menu e retorna um dict com as opções
-                    choice = int(input("Escolha um método de entrada (1 a %i): "%(len(options))))   # Recebe do usuário uma ação do menu (int)
-                    print("Opção escolhida: %s"%(options[choice]))                                  # Imprime a descrição da ação escolhida
-                    try: options[choice]                                                            # Verifica se a opção é válida
-                    except KeyError:                                                                # Se não for, mantém o laço e retorna ao menu
-                        print("Opção não disponível. Escolha um método do menu abaixo: ")           # Imprime mensagem de erro
-                    else:                                                                           # Se for válida
-                        if(choice == 1):                                                            # Se escolheu entrada manual
-                            A = cf.recebeA()                                                        # Roda função para receber os valores um a um
-                        elif(choice == 2):                                                          # Se escolheu entrada por arquivo
-                            # Script para importar a matriz A de um csv
-                            A = np.genfromtxt('matriz2.csv', delimiter=',')                         # Importa os valores do csv para um ndarray
-                        elif(choice == 3):                                                          # Se escolheu voltar ao menu
-                            break                                                                   # Quebra o laço e volta ao menu anterior
-                        else:                                                                       # Se escolheu encerrar o programa
-                            return                                                                  # Encerra o programa
-                        cf.decompLU(A)                                                              # Executa script de decomposição LU
-                        break                                                                       # Quebra o laço e volta ao menu anterior
-            elif(choice == 2):                                                                      # Se escolheu sistema tridiagonal
-                while True:                                                                         # Abre um laço e um nível de menu
-                    options = {                                                                     # Cria um menu de opções como dict
-                        1: 'Inserir a matriz tridiagonal \'A\' dos coeficientes de X',
-                        2: 'Inserir os vetores diagonais \'a,b,c\' da matriz tridiagonal dos coeficientes de X',
-                        3: 'Voltar'
-                        }
-                    options = printMenu(options=options, name="MÉTODO DE ENTRADA")                  # Imprime o menu e retorna um dict com as opções
-                    choice = int(input("Escolha um método de entrada (1 a %i): "%(len(options))))   # Recebe do usuário uma ação do menu (int)
-                    print("Opção escolhida: %s"%(options[choice]))                                  # Imprime a descrição da ação escolhida
-                    try: options[choice]                                                            # Verifica se a opção é válida
-                    except KeyError:                                                                # Se não for, mantém o laço e retorna ao menu
-                        print("Opção não disponível. Escolha um método do menu abaixo: ")           # Imprime mensagem de erro
-                    else:                                                                           # Se for válida
-                        if(choice == 1):                                                            # Se escolheu matriz de coeficientes
-                            # Script para receber uma matriz de coeficientes (quebrar em inserção manual e importação)
-                            A = []
-                        elif(choice == 2):                                                          # Se escolheu vetores diagonais
-                            # Script para receber vetores diagonais (quebrar em inserção manual e importação)
-                            a = np.array([0,-1,-1,-1])                                              # Subdiagonal da matriz de coeficientes
-                            b = np.array([2,2,2,2])                                                 # Diagonal da matriz de coeficientes
-                            c = np.array([-1,-1,-1,0])                                              # Sobrediagonal da matriz de coeficientes
-                        elif(choice == 3):                                                          # Se escolheu voltar ao menu
-                            break                                                                   # Quebra o laço e volta ao menu anterior
-                        else:                                                                       # Se escolheu encerrar o programa
-                            return                                                                  # Encerra o programa
-                        while True:
-                            options = {                                                                     # Cria um menu de opções como dict
-                                1: 'Digitar o vetor \'d\' de termos independetes',
-                                2: 'Escolher de um arquivo',
-                                3: 'Voltar'
-                                }
-                            options = printMenu(options=options, name="MÉTODO DE ENTRADA")                  # Imprime o menu e retorna um dict com as opções
-                            choice = int(input("Escolha um método de entrada (1 a %i): "%(len(options))))   # Recebe do usuário uma ação do menu (int)
-                            print("Opção escolhida: %s"%(options[choice]))                                  # Imprime a descrição da ação escolhida
-                            try: options[choice]                                                            # Verifica se a opção é válida
-                            except KeyError:                                                                # Se não for, mantém o laço e retorna ao menu
-                                print("Opção não disponível. Escolha um método do menu abaixo: ")           # Imprime mensagem de erro
-                            else:                                                                           # Se for válida
-                                if(choice == 1):                                                            # Se escolheu digitar manualmente
-                                    # Rodar script para receber do teclado do usuário
-                                    A = []
-                                elif(choice == 2):                                                          # Se escolheu importar
-                                    # Rodar script para importar de csv
-                                    d = np.array([1,0,0,1])                                                 # Coeficientes independentes do sistema
-                                elif(choice == 3):                                                          # Se escolheu voltar ao menu
-                                    break                                                                   # Quebra o laço e volta ao menu anterior
-                                else:                                                                       # Se escolheu encerrar o programa
-                                    return
-                                break
-                        break                                                                       # Quebra o laço e volta ao menu anterior
-                x = cf.solveTridi(a,b,c,d)                                                          # Executa script de resolução de sistema tridiagonal e guarda resultado em 'x'
-                print(x)                                                                            # Imprime 'x'
-            else:                                                                                   # Se o usuário escolheu sair
-                return                                                                              # Encerra o programa
+        try: choice = int(input("Escolha um método de entrada (1 a %i): "%(len(options))))          # Recebe do usuário uma ação do menu (int)
+        except ValueError: print("Opção não disponível. Escolha um método do menu abaixo: ")        # Imprime mensagem de erro
+        else:
+            try: options[choice]                                                                                # Verifica se a opção é válida
+            except KeyError: print("Opção não disponível. Escolha a ação desejada do menu abaixo: ")            # Imprime mensagem de erro
+            else:                                                                                               # Se for válida
+                print("Opção escolhida: %s"%(options[choice]))                                                  # Imprime a descrição da ação escolhida
+                if(choice == 1):                                                                                # Se escolheu decomp LU
+                    while True:                                                                                 # Abre um laço e um nível de menu
+                        options = {                                                                             # Cria um menu de opções como dict
+                            1: 'Digitar elementos um a um',
+                            2: 'Escolher de um arquivo .CSV',
+                            3: 'Voltar'
+                            }
+                        options = printMenu(options=options, name="MÉTODO DE ENTRADA")                          # Imprime o menu e retorna um dict com as opções
+                        try: choice = int(input("Escolha um método de entrada (1 a %i): "%(len(options))))      # Recebe do usuário uma ação do menu (int)
+                        except ValueError: print("Opção não disponível. Escolha um método do menu abaixo: ")    # Imprime mensagem de erro
+                        else:
+                            try: options[choice]                                                                # Verifica se a opção é válida
+                            except KeyError: print("Opção não disponível. Escolha um método do menu abaixo: ")  # Imprime mensagem de erro
+                            else:                                                                               # Se for válida
+                                print("Opção escolhida: %s"%(options[choice]))                                  # Imprime a descrição da ação escolhida
+                                if(choice == 1):                                                                # Se escolheu entrada manual
+                                    A = cf.recebeMatriz()                                                       # Roda função para receber os valores um a um
+                                elif(choice == 2):                                                              # Se escolheu entrada por arquivo
+                                    while True:
+                                        root = tkinter.Tk()
+                                        root.withdraw()
+                                        root.wm_attributes('-topmost', True)
+                                        root.filename = filedialog.askopenfilename(title='Escolher matriz A para decomposição LU')
+                                        try: root.filename
+                                        except (OSError,FileNotFoundError): print("Nenhum arquivo selecionado. Abordando ação e retornando ao menu.")
+                                        else:
+                                            if root.filename == '':
+                                                print("Nenhum arquivo selecionado. Abordando ação e retornando ao menu.")
+                                            else:
+                                                A = np.genfromtxt(root.filename, delimiter=',')                 # Importa os valores do csv para um ndarray
+                                        finally:
+                                            break
+                                elif(choice == 3):                                                              # Se escolheu voltar ao menu
+                                    break                                                                       # Quebra o laço e volta ao menu anterior
+                                else:                                                                           # Se escolheu encerrar o programa
+                                    return                                                                      # Encerra o programa
+                                try: A
+                                except NameError: pass
+                                else:
+                                    cf.decompLU(A)                                                              # Executa script de decomposição LU
+                                    break                                                                       # Quebra o laço e volta ao menu anterior
+                elif(choice == 2):                                                                              # Se escolheu sistema tridiagonal
+                    while True:                                                                                 # Abre um laço e um nível de menu
+                        options = {                                                                             # Cria um menu de opções como dict
+                            1: 'Inserir matriz tridiagonal \'A\' e vetor \'d\' (Ax=d)',
+                            2: 'Inserir os vetores \'a,b,c,d\' (Ax=d)',
+                            3: 'Voltar'
+                            }
+                        options = printMenu(options=options, name="MÉTODO DE ENTRADA")                          # Imprime o menu e retorna um dict com as opções
+                        try: choice = int(input("Escolha um método de entrada (1 a %i): "%(len(options))))      # Recebe do usuário uma ação do menu (int)
+                        except ValueError: print("Opção não disponível. Escolha um método do menu abaixo: ")    # Imprime mensagem de erro
+                        else:
+                            try: options[choice]                                                                # Verifica se a opção é válida
+                            except KeyError: print("Opção não disponível. Escolha um método do menu abaixo: ")  # Imprime mensagem de erro
+                            else:                                                                               # Se for válida
+                                print("Opção escolhida: %s"%(options[choice]))                                  # Imprime a descrição da ação escolhida
+                                if(choice == 1):                                                                # Se escolheu matriz de coeficientes
+                                    while True:
+                                        options = {                                                                             # Cria um menu de opções como dict
+                                            1: 'Digitar matriz \'A\' elementos um a um',
+                                            2: 'Escolher de um arquivo .CSV',
+                                            3: 'Voltar'
+                                            }
+                                        options = printMenu(options=options, name="MÉTODO DE ENTRADA")                          # Imprime o menu e retorna um dict com as opções
+                                        try: choice = int(input("Escolha um método de entrada (1 a %i): "%(len(options))))      # Recebe do usuário uma ação do menu (int)
+                                        except ValueError: print("Opção não disponível. Escolha um método do menu abaixo: ")    # Imprime mensagem de erro
+                                        else:
+                                            try: options[choice]                                                                # Verifica se a opção é válida
+                                            except KeyError: print("Opção não disponível. Escolha um método do menu abaixo: ")  # Imprime mensagem de erro
+                                            else:                                                                               # Se for válida
+                                                print("Opção escolhida: %s"%(options[choice]))                                  # Imprime a descrição da ação escolhida
+                                                if(choice == 1):                                                                # Se escolheu entrada manual
+                                                    A = cf.recebeMatriz()                                                       # Roda função para receber os valores um a um
+                                                    d = cf.recebeVetor(tamanho=len(A),nome_vetor='d')
+                                                elif(choice == 2):                                                              # Se escolheu entrada por arquivo
+                                                    while True:
+                                                        root = tkinter.Tk()
+                                                        root.withdraw()
+                                                        root.wm_attributes('-topmost', True)
+                                                        root.filename = filedialog.askopenfilename(title='Escolher matriz A tridiagonal')
+                                                        try: root.filename
+                                                        except (OSError,FileNotFoundError): print("Nenhum arquivo selecionado. Abordando ação e retornando ao menu.")
+                                                        else:
+                                                            if root.filename == '':
+                                                                print("Nenhum arquivo selecionado. Abordando ação e retornando ao menu.")
+                                                            else:
+                                                                A = np.genfromtxt(root.filename, delimiter=',')                         # Importa os valores do csv para um ndarray
+                                                                while True:
+                                                                    root = tkinter.Tk()
+                                                                    root.withdraw()
+                                                                    root.wm_attributes('-topmost', True)
+                                                                    root.filename = filedialog.askopenfilename(title='Escolher vetor \'d\' termos independentes (Ax=d)')
+                                                                    try: root.filename
+                                                                    except (OSError,FileNotFoundError): print("Nenhum arquivo selecionado. Abordando ação e retornando ao menu.")
+                                                                    else:
+                                                                        if root.filename == '':
+                                                                            print("Nenhum arquivo selecionado. Abordando ação e retornando ao menu.")
+                                                                        else:
+                                                                            d = np.genfromtxt(root.filename, delimiter=',')             # Importa os valores do csv para um ndarray
+                                                                    finally:
+                                                                        break
+                                                        finally:
+                                                            break
+                                                elif(choice == 3):                                                              # Se escolheu voltar ao menu
+                                                    break                                                                       # Quebra o laço e volta ao menu anterior
+                                                else:                                                                           # Se escolheu encerrar o programa
+                                                    return                                                                      # Encerra o programa
+                                                try: A
+                                                except NameError: pass
+                                                else:
+                                                    break                                                                       # Quebra o laço e volta ao menu anterior
+                                elif(choice == 2):                                                                              # Se escolheu vetores diagonais
+                                    while True:
+                                        options = {                                                                             # Cria um menu de opções como dict
+                                            1: 'Digitar os vetores \'a,b,c,d\' elementos um a um',
+                                            2: 'Escolher de um arquivo .CSV (um vetor por linha)',
+                                            3: 'Voltar'
+                                            }
+                                        options = printMenu(options=options, name="MÉTODO DE ENTRADA")                          # Imprime o menu e retorna um dict com as opções
+                                        try: choice = int(input("Escolha um método de entrada (1 a %i): "%(len(options))))      # Recebe do usuário uma ação do menu (int)
+                                        except ValueError: print("Opção não disponível. Escolha um método do menu abaixo: ")    # Imprime mensagem de erro
+                                        else:
+                                            try: options[choice]                                                                # Verifica se a opção é válida
+                                            except KeyError: print("Opção não disponível. Escolha um método do menu abaixo: ")  # Imprime mensagem de erro
+                                            else:                                                                               # Se for válida
+                                                print("Opção escolhida: %s"%(options[choice]))                                  # Imprime a descrição da ação escolhida
+                                                if(choice == 1):                                                                # Se escolheu entrada manual
+                                                    while True:
+                                                        try: n = int(input("Digite a dimensão n do sistema: "))                 # Roda função para receber os valores um a um
+                                                        except ValueError: print("Inserção inválida.")
+                                                        else:
+                                                            if n == 0:
+                                                                print("Dimensão 0 inválida.")
+                                                            else:
+                                                                a = cf.recebeVetor(tamanho=n,nome_vetor='a') # Deve inserir o priemrio valor como 0
+                                                                b = cf.recebeVetor(tamanho=n,nome_vetor='b')
+                                                                c = cf.recebeVetor(tamanho=n,nome_vetor='c') # Deve inserir o último valor como 0
+                                                                d = cf.recebeVetor(tamanho=n,nome_vetor='d')
+                                                                break
+                                                elif(choice == 2):                                                              # Se escolheu entrada por arquivo
+                                                    while True:
+                                                        root = tkinter.Tk()
+                                                        root.withdraw()
+                                                        root.wm_attributes('-topmost', True)
+                                                        root.filename = filedialog.askopenfilename(title='Escolher matriz A tridiagonal')
+                                                        try: root.filename
+                                                        except (OSError,FileNotFoundError): print("Nenhum arquivo selecionado. Abordando ação e retornando ao menu.")
+                                                        else:
+                                                            if root.filename == '':
+                                                                print("Nenhum arquivo selecionado. Abordando ação e retornando ao menu.")
+                                                            else:
+                                                                a = np.genfromtxt(root.filename, delimiter=',')[0]              # Importa os valores do csv para um ndarray
+                                                                b = np.genfromtxt(root.filename, delimiter=',')[1]              # Importa os valores do csv para um ndarray
+                                                                c = np.genfromtxt(root.filename, delimiter=',')[2]              # Importa os valores do csv para um ndarray
+                                                                d = np.genfromtxt(root.filename, delimiter=',')[3]              # Importa os valores do csv para um ndarray
+                                                        finally:
+                                                            break
+                                                elif(choice == 3):                                                              # Se escolheu voltar ao menu
+                                                    break                                                                       # Quebra o laço e volta ao menu anterior
+                                                else:                                                                           # Se escolheu encerrar o programa
+                                                    return                                                                      # Encerra o programa
+                                                try: a
+                                                except NameError: pass
+                                                else:
+                                                    break                                                                       # Quebra o laço
+                                elif(choice == 3):                                                                              # Se escolheu voltar ao menu
+                                    break                                                                                       # Quebra o laço e volta ao menu anterior
+                                else:                                                                                           # Se escolheu encerrar o programa
+                                    return                                                                                      # Encerra o programa
+                                break                                                                                           # Quebra o laço e volta ao menu anterior
+                    cf.solveTridi(a,b,c,d)                                                                                      # Executa script de resolução de sistema tridiagonal e guarda resultado em 'x'
+                else:                                                                                                           # Se o usuário escolheu sair
+                    return                                                                                                      # Encerra o programa
 
 main()
