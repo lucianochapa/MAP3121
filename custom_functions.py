@@ -1,3 +1,4 @@
+from math import cos, pi
 import numpy as np
 
 # Funções para receber input do usuário
@@ -6,7 +7,7 @@ def recebeMatriz():                                                             
     
     Retorna
     ====
-    A: ndarray
+    matriz: ndarray
         Matriz formada pelas inserções do usuário
     '''
     
@@ -17,14 +18,14 @@ def recebeMatriz():                                                             
             if n == 0:
                 print("Dimensão 0 inválida.")
             else:
-                A = []                                                                          # Cria lista vazia para receber os valores
+                matriz = []                                                                          # Cria lista vazia para receber os valores
                 for i in range(0,n):                                                            # Itera para o número 'n' de linhas
                     print("Linha %i"%(i+1))                                                     # Mostra ao usuário a linha atual
                     while True:
-                        try: A.append([int(input("A[%i,%i]: "%(i+1,j+1))) for j in range(0,n)]) # Pede e concatena à lista o próximo valor
+                        try: matriz.append([int(input("A[%i,%i]: "%(i+1,j+1))) for j in range(0,n)]) # Pede e concatena à lista o próximo valor
                         except ValueError: print("Inserção inválida.")
                         else: break
-            return np.array(A, float)                                                       # Devolve a matriz 'A' como np.ndarray
+            return np.array(matriz, float)                                                       # Devolve a matriz 'A' como np.ndarray
 
 def recebeVetor(tamanho: int, nome_vetor: str):                                 # Recebe do usuário um vetor
     '''Recebe do teclado do usuário um vetor de tmanho 'n' e seus elementos um a um.
@@ -50,12 +51,12 @@ def recebeVetor(tamanho: int, nome_vetor: str):                                 
     return np.array(vetor, float)                                         # Devolve 'vetor' como np.ndarray
 
 # Funções para transformações (ida e volta) entre matriz tridiagonal e vetores diagonais
-def A2abc(A: np.ndarray):                                                       # Transforma uma matriz tridiagonal em 3 vetores
+def A2abc(matriz: np.ndarray):                                                       # Transforma uma matriz tridiagonal em 3 vetores
     '''Recebe uma matriz tridiagonal e a transforma nos 3 vetores diagonais.
 
     Parâmetros
     ===
-    A: ndarray
+    matriz: ndarray
         Matriz tridiagonal
 
     Retorna
@@ -69,19 +70,19 @@ def A2abc(A: np.ndarray):                                                       
             Sobrediagonal de A
     ]
     '''
-    n = len(A)                  # Guarda o tamanho da matriz
-    a = []                      # Cria lista vazia
-    b = []                      # Cria lista vazia
-    c = []                      # Cria lista vazia
-    for i in range(1,n):        # Itera para o tamanho da matriz
-        a.append(A[i,i-1])      # Cria o vetor subdiagonal 'a'
-        b.append(A[i-1,i-1])    # Cria o vetor diagonal 'b'
-        c.append(A[i-1,i])      # Cria o vetor sobrediagonal 'c'
-    b.append(A[n-1,n-1])        # Guarda o último valor do vetor diagonal 'b'
-    a = np.array(a)             # Transforma a lista em np.ndarray
-    b = np.array(b)             # Transforma a lista em np.ndarray
-    c = np.array(c)             # Transforma a lista em np.ndarray
-    return a, b, c              # Retorna os valores 'a,b,c' como tupla [np.ndarray, np.ndarray, np.ndarray]
+    n = len(matriz)                 # Guarda o tamanho da matriz
+    a = []                          # Cria lista vazia
+    b = []                          # Cria lista vazia
+    c = []                          # Cria lista vazia
+    for i in range(1,n):            # Itera para o tamanho da matriz
+        a.append(matriz[i,i-1])     # Cria o vetor subdiagonal 'a'
+        b.append(matriz[i-1,i-1])   # Cria o vetor diagonal 'b'
+        c.append(matriz[i-1,i])     # Cria o vetor sobrediagonal 'c'
+    b.append(matriz[n-1,n-1])       # Guarda o último valor do vetor diagonal 'b'
+    a = np.array(a)                 # Transforma a lista em np.ndarray
+    b = np.array(b)                 # Transforma a lista em np.ndarray
+    c = np.array(c)                 # Transforma a lista em np.ndarray
+    return a, b, c                  # Retorna os valores 'a,b,c' como tupla [np.ndarray, np.ndarray, np.ndarray]
 
 def abc2A(a: np.ndarray, b: np.ndarray, c: np.ndarray):                         # Transforma 3 vetores diagonais em uma matriz tridiagonal
     '''Recebe 3 vetores diagonais e os transforma numa matriz tridiagonal.
@@ -97,24 +98,24 @@ def abc2A(a: np.ndarray, b: np.ndarray, c: np.ndarray):                         
 
     Retorna
     ===
-    A: ndarray
+    matriz: ndarray
         Matriz tridiagonal
     '''
-    n = len(b)                          # Guarda o tamanho do vetor diagonal
-    A = np.array([[0]*n]*n, float)      # Cria matriz 'A'(n por n) com zero em todas as posições
-    for i in range(0,n-1):              # Itera para o tamanho do vetor diagonal
-        A[i+1,i] = a[i]                 # Recebe valores do vetor subdiagonal 'a'
-        A[i,i] = b[i]                   # Recebe valores do vetor diagonal 'b'
-        A[i,i+1] = c[i]                 # Recebe valores do vetor sobrediagonal 'c'
-    A[n-1,n-1] = b[n-1]                 # Recebe o último valor do vetor diagonal 'b'
-    return A                            # Retorna a matriz 'A' como np.ndarray
+    n = len(b)                              # Guarda o tamanho do vetor diagonal
+    matriz = np.array([[0]*n]*n, float)     # Cria matriz 'A'(n por n) com zero em todas as posições
+    for i in range(0,n-1):                  # Itera para o tamanho do vetor diagonal
+        matriz[i+1,i] = a[i]                # Recebe valores do vetor subdiagonal 'a'
+        matriz[i,i] = b[i]                  # Recebe valores do vetor diagonal 'b'
+        matriz[i,i+1] = c[i]                # Recebe valores do vetor sobrediagonal 'c'
+    matriz[n-1,n-1] = b[n-1]                # Recebe o último valor do vetor diagonal 'b'
+    return matriz                           # Retorna a matriz 'A' como np.ndarray
 
-def cycA2abc(A: np.ndarray):                                                    # Transforma uma matriz tridiagonal cíclica em 3 vetores diagonais
+def cycA2abc(matriz: np.ndarray):                                                    # Transforma uma matriz tridiagonal cíclica em 3 vetores diagonais
     '''Recebe uma matriz tridiagonal cíclica e a transforma em 3 vetores
     
     Parâmetros
     ===
-    A: ndarray
+    matriz: ndarray
         Matriz tridiagonal cíclica
 
     Retorna
@@ -128,26 +129,26 @@ def cycA2abc(A: np.ndarray):                                                    
             Vetor sobrediagonal
     ]
     '''
-    n = len(A)                  # Guarda o tamanho da matriz
+    n = len(matriz)                  # Guarda o tamanho da matriz
     a = []                      # Cria lista vazia
     b = []                      # Cria lista vazia
     c = []                      # Cria lista vazia
-    a.append(A[0,n-1])          # Guarda o primeiro valor do vetor subdiagonal 'a'
+    a.append(matriz[0,n-1])          # Guarda o primeiro valor do vetor subdiagonal 'a'
     for i in range(1,n):        # Itera para o tamanho da matriz
-        a.append(A[i,i-1])      # Cria o vetor subdiagonal 'a'
-        b.append(A[i-1,i-1])    # Cria o vetor diagonal 'b'
-        c.append(A[i-1,i])      # Cria o vetor sobrediagonal 'c'
-    b.append(A[n-1,n-1])        # Guarda o último valor do vetor diagonal 'b'
-    c.append(A[n-1,0])          # Guarda o último valor do vetor sobrediagonal 'c'
+        a.append(matriz[i,i-1])      # Cria o vetor subdiagonal 'a'
+        b.append(matriz[i-1,i-1])    # Cria o vetor diagonal 'b'
+        c.append(matriz[i-1,i])      # Cria o vetor sobrediagonal 'c'
+    b.append(matriz[n-1,n-1])        # Guarda o último valor do vetor diagonal 'b'
+    c.append(matriz[n-1,0])          # Guarda o último valor do vetor sobrediagonal 'c'
     return a, b, c
 
 # Funções de cálculo do exercício-programa
-def decompLU(A: np.ndarray):                                                    # Recebe uma matriz e executa sua decomposição LU
+def decompLU(matriz: np.ndarray):                                                    # Recebe uma matriz e executa sua decomposição LU
     '''Recebe uma matriz A e devolve sua decomposição LU
     
     Parâmetros
     ===
-    A: ndarray
+    matriz: ndarray
         A matriz quadrada que se deseja decompor
 
     Retorna
@@ -160,15 +161,15 @@ def decompLU(A: np.ndarray):                                                    
     ]
     '''
     print("Matriz A:")                                                          # Imprime a matriz 'A' que foi inserida pelo usuário
-    print(A)                                                                    # Imprime a matriz 'A' que foi inserida pelo usuário
-    n = len(A)                                                                  # Guarda o tamanho da matriz 'A'
+    print(matriz)                                                                    # Imprime a matriz 'A' que foi inserida pelo usuário
+    n = len(matriz)                                                                  # Guarda o tamanho da matriz 'A'
     L = np.array([[0]*n]*n, float)                                              # Cria matriz 'L'(n por n) com zeros em todas as posições e transforma a lista em ndarray
     for i in range(0,n):                                                        # Itera para todas as linhas
         L[i,i] = 1                                                              # Todos os elementos da diagonal viram 1
     U = np.array([[0]*n]*n, float)                                              # Cria matriz 'U'(n por n) com zeros em todas as posições e transforma a lista em ndarray
     for i in range(0,n):                                                        # Itera para todas as linhas
-        U[i,i:] = A[i,i:] - np.dot(L[i,:i],U[:i,i:])                            # EXPRESSÃO (1) DO EXERCÍCIO
-        L[(i+1):,i] = (1/U[i,i])*(A[(i+1):,i] - np.dot(L[(i+1):,:i],U[:i,i]))   # EXPRESSÃO (2) DO EXERCÍCIO
+        U[i,i:] = matriz[i,i:] - np.dot(L[i,:i],U[:i,i:])                            # EXPRESSÃO (1) DO EXERCÍCIO
+        L[(i+1):,i] = (1/U[i,i])*(matriz[(i+1):,i] - np.dot(L[(i+1):,:i],U[:i,i]))   # EXPRESSÃO (2) DO EXERCÍCIO
     print("Matriz inferior L: ")                                                # Imprime a matriz 'L' (inferior)
     print(L)                                                                    # Imprime a matriz 'L' (inferior)
     print("Matriz superior U: ")                                                # Imprime a matriz 'U' (superior)
@@ -306,10 +307,6 @@ def solveCycTridi(a: np.ndarray, b: np.ndarray, c: np.ndarray, d: np.ndarray):  
         Vetor de soluções para X do sistema
     '''    
     
-    # a = np.array([1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1])
-    # b = np.array([2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2])
-    # c = np.array([-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,1])
-    # d = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1])
     n = len(b)
     v = np.array([], float)
     w = np.array([], float)
@@ -319,20 +316,33 @@ def solveCycTridi(a: np.ndarray, b: np.ndarray, c: np.ndarray, d: np.ndarray):  
     v = np.append(v,c[n-2])
     w = np.append(w,c[n-1])
     w = np.append(w,a[n-1])
-    # a_n = a[n-1]
-    # b_n = b[n-1]
-    # c_n = c[n-1]
-    # d_n = d[n-1]
-    # a = np.delete(a,[0,n-1])
-    # c = np.delete(c,[n-1,n-2])
-    # b = np.delete(b,n-1)
-    # d = np.delete(d,[n-1])
     l, u = decompLUabc(np.delete(a,[0,n-1]),np.delete(b,n-1),np.delete(c,[n-1,n-2]))
     y = solveLydUxy(l,u,np.delete(c,[n-1,n-2]),np.delete(d,[n-1]))
     z = solveLydUxy(l,u,np.delete(c,[n-1,n-2]),v)
     x_n = (d[n-1]-c[n-1]*y[0]-a[n-1]*y[n-2])/(b[n-1]-c[n-1]*z[0]-a[n-1]*z[n-2])
     x = y - x_n*z
     x = np.append(x,x_n)
-    print(x)
     
     return x        # Resolve o sistema para X
+
+def genSys(n: int):                                                          # Gera vetores diagonais e termos independentes de um sistema tridiagonal
+    '''Gera um sistema linear tridiagonal padronizado de acordo com o exercício-programa
+    
+    Parâmetro:
+    n: int
+        Dimensão do sistema'''
+    a = np.array([])
+    b = np.array([])
+    c = np.array([])
+    d = np.array([])
+    for i in range(0,n-1):
+        a = np.append(a,(2*(i+1)-1)/(4*(i+1)))
+        c = np.append(c,1-a[i])
+        b = np.append(b,2)
+        d = np.append(d,cos(2*pi*(i+1)*(i+1)/(n*n)))
+    a = np.append(a,(2*n-1)/(2*n))
+    c = np.append(c,1-a[n-1])
+    b = np.append(b,2)
+    d = np.append(d,cos(2*pi*(n*n)/(n*n)))
+    
+    return a,b,c,d

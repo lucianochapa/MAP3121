@@ -10,8 +10,9 @@
 # # Importação de libs
 import numpy as np, custom_functions as cf, tkinter
 from tkinter import filedialog
+from math import cos, pi
 # import matplotlib.pyplot as plt
-# import sys, time, datetime, math, os
+# import sys, time, datetime, os
 
 def printMenu(options: dict, name:str):
     '''Imprime um menu de opções no terminal
