@@ -44,7 +44,7 @@ def recebeVetor(tamanho: int, nome_vetor: str):                                 
     vetor = []                                                            # Cria lista vazia para receber os valores
     for i in range(0,tamanho):
         while True:
-            try: vetor.append(int(input("%s[%i]: "%(nome_vetor,i+1))))    # Pede e concatena à lista o próximo valor
+            try: vetor.append(int(input("%s[%i de %i]: "%(nome_vetor,i+1,tamanho))))    # Pede e concatena à lista o próximo valor
             except ValueError: print("Inserção inválida.")
             else: break
     return np.array(vetor, float)                                         # Devolve 'vetor' como np.ndarray
@@ -109,6 +109,38 @@ def abc2A(a: np.ndarray, b: np.ndarray, c: np.ndarray):                         
     A[n-1,n-1] = b[n-1]                 # Recebe o último valor do vetor diagonal 'b'
     return A                            # Retorna a matriz 'A' como np.ndarray
 
+def cycA2abc(A: np.ndarray):                                                    # Transforma uma matriz tridiagonal cíclica em 3 vetores diagonais
+    '''Recebe uma matriz tridiagonal cíclica e a transforma em 3 vetores
+    
+    Parâmetros
+    ===
+    A: ndarray
+        Matriz tridiagonal cíclica
+
+    Retorna
+    ===
+    tuple [
+        a: ndarray
+            Vetor subdiagonal
+        b: ndarray
+            Vetor diagonal
+        c: ndarray
+            Vetor sobrediagonal
+    ]
+    '''
+    n = len(A)                  # Guarda o tamanho da matriz
+    a = []                      # Cria lista vazia
+    b = []                      # Cria lista vazia
+    c = []                      # Cria lista vazia
+    a.append(A[0,n-1])          # Guarda o primeiro valor do vetor subdiagonal 'a'
+    for i in range(1,n):        # Itera para o tamanho da matriz
+        a.append(A[i,i-1])      # Cria o vetor subdiagonal 'a'
+        b.append(A[i-1,i-1])    # Cria o vetor diagonal 'b'
+        c.append(A[i-1,i])      # Cria o vetor sobrediagonal 'c'
+    b.append(A[n-1,n-1])        # Guarda o último valor do vetor diagonal 'b'
+    c.append(A[n-1,0])          # Guarda o último valor do vetor sobrediagonal 'c'
+    return a, b, c
+
 # Funções de cálculo do exercício-programa
 def decompLU(A: np.ndarray):                                                    # Recebe uma matriz e executa sua decomposição LU
     '''Recebe uma matriz A e devolve sua decomposição LU
@@ -169,7 +201,7 @@ def decompLUabc(a: np.ndarray, b: np.ndarray, c: np.ndarray):                   
     u = np.array([0]*n, float)              # Cria um vetor vazio com zero em todas as posições, de tamanho n
     u[0] = b[0]                             # Primeiro termo do vetor 'u'
     for i in range(1,n):                    # Itera ao longo do tamanho do vetor diagonal
-        l[i-1] = a[i]/u[i-1]                # Expressão do exercício
+        l[i-1] = a[i-1]/u[i-1]              # Expressão do exercício
         u[i] = b[i] - l[i-1]*c[i-1]         # Expressão do exercício
     return l, u                             # Retorna os vetores 'l,u' como tupla [np.ndarray, np.ndarray]
 
@@ -197,27 +229,27 @@ def solveLydUxy(l: np.ndarray, u: np.ndarray, c: np.ndarray, d: np.ndarray):    
     y[0] = d[0]                             # Primeiro termo de 'y'
     for i in range(1,n):                    # Itera para o tamanho do sistema
         y[i] = d[i] - l[i-1]*y[i-1]         # Expressão do exercício
-    print("Sistema Ly=d")
-    print("L: ")
-    print(abc2A(l,[1]*(len(l)+1),[0]*(len(l)+1)))
-    print("d: ")
-    print(d)
-    print("Valor encontrado para \'y\'")
-    print("y: ")
-    print(y)
+    # print("Sistema Ly=d")
+    # print("L: ")
+    # print(abc2A(l,[1]*(len(l)+1),[0]*(len(l)+1)))
+    # print("d: ")
+    # print(d)
+    # print("Valor encontrado para \'y\'")
+    # print("y: ")
+    # print(y)
     x = np.array([0]*n, float)              # Cria um vetor 'x' com zero em todas as posições
     x[n-1] = y[n-1]/u[n-1]                  # Último termo de 'x'
     for i in range(n-2,-1,-1):              # Itera para o tamanho do sistema, do último para o primeiro termo
         x[i] = (y[i] - c[i]*x[i+1])/u[i]    # Expressão do exercício
-    print("Sistema Ux=y")
-    print("U: ")
-    print(abc2A([0]*(len(l)+1),u,c))
-    print("y: ")
-    print(y)
-    print("Valor encontrado para \'x\'")
-    print("x: ")
-    print(x)
-    return                                # Retorna 'x' como np.ndarray
+    # print("Sistema Ux=y")
+    # print("U: ")
+    # print(abc2A([0]*(len(l)+1),u,c))
+    # print("y: ")
+    # print(y)
+    # print("Valor encontrado para \'x\'")
+    # print("x: ")
+    # print(x)
+    return x                                # Retorna 'x' como np.ndarray
 
 def solveTridi(a: np.ndarray, b: np.ndarray, c: np.ndarray, d: np.ndarray):     # Recebe vetores diagonais e independente e devolve a resolução
     '''Resolve um sistema linear tridiagonal A*x = d utilizando uma decomposição LU: Ly = d, Ux = y
@@ -238,19 +270,69 @@ def solveTridi(a: np.ndarray, b: np.ndarray, c: np.ndarray, d: np.ndarray):     
     x: ndarray
         Vetor de soluções para X do sistema
     '''    
-    print("Sistema Ax=d")
-    print("A: ")
-    A = abc2A(a,b,c)
-    print(A)
-    print("d: ")
-    print(d)
+    # print("Sistema Ax=d")
+    # print("A: ")
+    # A = abc2A(a,b,c)
+    # print(A)
+    # print("d: ")
+    # print(d)
     l, u = decompLUabc(a,b,c)   # Decompõe 3 vetores 'a,b,c' de um sistema tridiagonal em vetores 'l' (subdiagonal inferior) e 'u' (diagonal superior)
-    print("Decomposição A=LU")
-    print("A: ")
-    print(A)
-    print("L: ")
-    print(abc2A(l,[1]*(len(l)+1),[0]*(len(l)+1)))
-    print("U: ")
-    print(abc2A([0]*(len(l)+1),u,c))
-    solveLydUxy(l,u,c,d)    # Usa os vetores 'l' (subdiagonal inferior), 'u' (diagonal superior), 'c' (sobrediagonal superior), 'd' (termos independentes) e resolve o sistema para X
-    return                    # Retorna um vetor de soluções
+    # print("Decomposição A=LU")
+    # print("A: ")
+    # print(A)
+    # print("L: ")
+    # print(abc2A(l,[1]*(len(l)+1),[0]*(len(l)+1)))
+    # print("U: ")
+    # print(abc2A([0]*len(u),u,c))
+    return solveLydUxy(l,u,c,d)        # Resolve o sistema para X
+
+def solveCycTridi(a: np.ndarray, b: np.ndarray, c: np.ndarray, d: np.ndarray):  # Recebe vetores diagonais e independente e devolve a resolução
+    '''Resolve um sistema tridiagonal cíclico A*x = d passando por sua submatriz principal T e resolvendo: T*(x')+(x_n)*v=(d'), (w^t)*(x')+(x_n)(b_n)=(d_n)
+
+    Parâmetros
+    ===
+    a: ndarray
+        Vetor contendo a subdiagonal
+    b: ndarray
+        Vetor contendo a diagonal
+    c: ndarray
+        Vetor contendo a sobrediagonal
+    d: ndarray
+        Vetor dos coeficientes independentes do sistema
+
+    Retorna
+    ===
+    x: ndarray
+        Vetor de soluções para X do sistema
+    '''    
+    
+    # a = np.array([1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1])
+    # b = np.array([2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2])
+    # c = np.array([-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,1])
+    # d = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1])
+    n = len(b)
+    v = np.array([], float)
+    w = np.array([], float)
+    v = np.append(v,a[0])
+    for t in range(1,n-2):
+        v = np.append(v,0)
+    v = np.append(v,c[n-2])
+    w = np.append(w,c[n-1])
+    w = np.append(w,a[n-1])
+    # a_n = a[n-1]
+    # b_n = b[n-1]
+    # c_n = c[n-1]
+    # d_n = d[n-1]
+    # a = np.delete(a,[0,n-1])
+    # c = np.delete(c,[n-1,n-2])
+    # b = np.delete(b,n-1)
+    # d = np.delete(d,[n-1])
+    l, u = decompLUabc(np.delete(a,[0,n-1]),np.delete(b,n-1),np.delete(c,[n-1,n-2]))
+    y = solveLydUxy(l,u,np.delete(c,[n-1,n-2]),np.delete(d,[n-1]))
+    z = solveLydUxy(l,u,np.delete(c,[n-1,n-2]),v)
+    x_n = (d[n-1]-c[n-1]*y[0]-a[n-1]*y[n-2])/(b[n-1]-c[n-1]*z[0]-a[n-1]*z[n-2])
+    x = y - x_n*z
+    x = np.append(x,x_n)
+    print(x)
+    
+    return x        # Resolve o sistema para X
