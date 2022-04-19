@@ -231,7 +231,8 @@ def main():
                         options = {                                                                                             # Cria um menu de opções como dict
                             1: 'Inserir matriz tridiagonal cíclica \'A\' e vetor \'d\' (Ax=d)',
                             2: 'Inserir os vetores \'a,b,c,d\' (Ax=d)',
-                            3: 'Voltar'
+                            3: 'Testar modelo do exercício-programa (n=20)',
+                            4: 'Voltar'
                             }
                         options = printMenu(options=options, name="MÉTODO DE ENTRADA")                                          # Imprime o menu e retorna um dict com as opções
                         try: choice = int(input("Escolha um método de entrada (1 a %i): "%(len(options))))                      # Recebe do usuário uma ação do menu (int)
@@ -355,12 +356,14 @@ def main():
                                                 except NameError: pass
                                                 else:
                                                     break                                                                       # Quebra o laço
-                                elif(choice == 3):                                                                              # Se escolheu voltar ao menu
+                                elif(choice == 3):                                                                              # Se escolheu modelo de sistema
+                                    a,b,c,d = cf.genSysMAP(n=20)                                                                # Gerar sistema e atribuir os valores aos vetores
+                                elif(choice == 4):                                                                              # Se escolheu voltar ao menu
                                     break                                                                                       # Quebra o laço e volta ao menu anterior
                                 else:                                                                                           # Se escolheu encerrar o programa
                                     return                                                                                      # Encerra o programa
                                 break                                                                                           # Quebra o laço e volta ao menu anterior
-                    cf.solveCycTridi(a,b,c,d)                                                                                      # Executa script de resolução de sistema tridiagonal e guarda resultado em 'x'
+                    print(cf.solveCycTridi(a,b,c,d))                                                                                   # Executa script de resolução de sistema tridiagonal e guarda resultado em 'x'
                 else:                                                                                                           # Se o usuário escolheu sair
                     return                                                                                                      # Encerra o programa
 

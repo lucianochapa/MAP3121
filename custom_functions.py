@@ -51,7 +51,7 @@ def recebeVetor(tamanho: int, nome_vetor: str):                                 
     return np.array(vetor, float)                                         # Devolve 'vetor' como np.ndarray
 
 # Funções para transformações (ida e volta) entre matriz tridiagonal e vetores diagonais
-def A2abc(matriz: np.ndarray):                                                       # Transforma uma matriz tridiagonal em 3 vetores
+def A2abc(matriz: np.ndarray):                                                  # Transforma uma matriz tridiagonal em 3 vetores
     '''Recebe uma matriz tridiagonal e a transforma nos 3 vetores diagonais.
 
     Parâmetros
@@ -110,7 +110,7 @@ def abc2A(a: np.ndarray, b: np.ndarray, c: np.ndarray):                         
     matriz[n-1,n-1] = b[n-1]                # Recebe o último valor do vetor diagonal 'b'
     return matriz                           # Retorna a matriz 'A' como np.ndarray
 
-def cycA2abc(matriz: np.ndarray):                                                    # Transforma uma matriz tridiagonal cíclica em 3 vetores diagonais
+def cycA2abc(matriz: np.ndarray):                                               # Transforma uma matriz tridiagonal cíclica em 3 vetores diagonais
     '''Recebe uma matriz tridiagonal cíclica e a transforma em 3 vetores
     
     Parâmetros
@@ -143,7 +143,7 @@ def cycA2abc(matriz: np.ndarray):                                               
     return a, b, c
 
 # Funções de cálculo do exercício-programa
-def decompLU(matriz: np.ndarray):                                                    # Recebe uma matriz e executa sua decomposição LU
+def decompLU(matriz: np.ndarray):                                               # Recebe uma matriz e executa sua decomposição LU
     '''Recebe uma matriz A e devolve sua decomposição LU
     
     Parâmetros
@@ -325,12 +325,27 @@ def solveCycTridi(a: np.ndarray, b: np.ndarray, c: np.ndarray, d: np.ndarray):  
     
     return x        # Resolve o sistema para X
 
-def genSys(n: int):                                                          # Gera vetores diagonais e termos independentes de um sistema tridiagonal
+def genSysMAP(n: int):                                                          # Gera vetores diagonais e termos independentes de um sistema tridiagonal
     '''Gera um sistema linear tridiagonal padronizado de acordo com o exercício-programa
     
-    Parâmetro:
+    Parâmetros
+    ===
     n: int
-        Dimensão do sistema'''
+        Dimensão do sistema
+
+    Retorna
+    ===
+    tuple [
+        a: ndarray
+            Vetor subdiagonal da matriz de coeficientes do sistema
+        b: ndarray
+            Vetor diagonal da matriz de coeficientes do sistema
+        c: ndarray
+            Vetor sobrediagonal da matriz de coeficientes do sistema
+        d: ndarray
+            Vetor de coeficientes independentes do sistema
+    ]    
+    '''
     a = np.array([])
     b = np.array([])
     c = np.array([])
