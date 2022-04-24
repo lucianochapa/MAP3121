@@ -1,48 +1,123 @@
-Instruções de uso:
--Rodar o programa do diretório root: 'MAP3121'
--Para executar o programa, o diretório deve manter a estrutura interna
--Abrir o arquivo 'main.py'
+Universidade de São Paulo
+    Instituto de Matemática e Estatística - Departamento de Matemática Aplicada
+    Escola Politécnica
+MAP3121 - Métodos Numéricos e Aplicações - 2022.1
+    Exercício-programa 01
+Autoria
+    Bruno Prasinos Bernal
+    Luciano Chaparin Luisi
+
+Breve descrição do projeto
+    A funcionalidade do script `main.py` é executar 3 funções principais
+       1: Decomposição LU de uma matriz
+       2: Resolução de um sistema tridiagonal Ax=d a partir de uma decomposição LU da matriz A
+       3: Resolução de um sistema tridiagonal cíclico Ax=d
+    Sua interface de usuário é através da linha de comando, pedindo do usuário os parâmetros de entrada
+    O usuário deve escolher adequadamente a função que deseja executar, o método de entrada dos dados e os dados em si
+    O programa imprime os devidos resultados no terminal de volta ao usuário
+
+######################################################################################################
+
+Instruções de uso
+    Para executar o programa, o diretório deve manter a estrutura interna
+    Deve-se rodar o programa a partir do diretório root: 'MAP3121'
+    Executar o arquivo 'main.py'
+    Seguir as intruções na tela conforme determinação do programa
+    
+
+    Trechos de impressão do programa são indicados por três pontos
+    Trechos de inserção do usuário são indicados por três sinais de maior
+    
+        ... MENU PRINCIPAL ---------------------------------------------------- 
+        ... 1. Decomposição LU de matriz
+        ... 2. Resolução de sistema tridiagonal usando decomposição LU de matriz
+        ... 3. Resolução de sistema tridiagonal cíclico
+        ... 4. Encerrar programa
+        ... -------------------------------------------------------------------
+        ... Escolha a ação desejada (1 a 4):
+        >>> 1
+    
+    O exemplo acima apresenta o menu inicial que é impresso assim que o programa inicia. O usuário pode, então, selecionar uma das 3 funções principais
+    O programa irá perguntar o modo de entrada desejado
+
+        ... Opção escolhida: Decomposição LU de matriz
+        ... DECOMP LU - MÉTODO DE ENTRADA -------------------------------------
+        ... 1. Digitar elementos um a um
+        ... 2. Escolher de um arquivo .CSV
+        ... 3. Voltar
+        ... 4. Encerrar programa
+        ... -------------------------------------------------------------------
+        ... Escolha um método de entrada (1 a 4):
+
+        Sempre que escolher digitar, o programa executará um script para receber os dados perguntando ao usuário a próxima entrada
+            Exemplo:
+                ... Escolha um método de entrada (1 a 4):
+                >>> 1
+                ... Opção escolhida: Digitar elementos um a um
+                ... Digite o tamanho n da matriz (quadrada, n x n):
+                >>> 4
+                ... Linha 1
+                ... A[1,1]:
+                >>> 1
+                ... A[1,2]:
+        
+        Quando escolher importar os dados de um arquivo .CSV, será aberto o explorador para selecionar o arquivo desejado
+            Arquivos devem apresentar os elementos separados por vírgula, sem cabeçalho
+            Arquivos de matrizes devem conter uma linha de elementos por linha de texto
+            Arquivos contendo vetores diagonais devem conter um vetor por linha de texto
+
+    Uma vez selecionados os dados, o programa executará as funções adequadas, imprimindo os parâmetros de entrada e os resultados de volta ao usuário
+        Exemplo (decomposição LU):
+            ... Matriz A:
+            ... [[ 1.  1.  0.  3.]
+            ...  [ 2.  1. -1.  1.]
+            ...  [ 3. -1. -1.  2.]
+            ...  [-1.  2.  3. -1.]]
+            ... Matriz inferior L:
+            ... [[ 1.  0.  0.  0.]
+            ...  [ 2.  1.  0.  0.]
+            ...  [ 3.  4.  1.  0.]
+            ...  [-1. -3.  0.  1.]]
+            ... Matriz superior U:
+            ... [[  1.   1.   0.   3.]
+            ...  [  0.  -1.  -1.  -5.]
+            ...  [  0.   0.   3.  13.]
+            ...  [  0.   0.   0. -13.]]
 
 ######################################################################################################
 
 Arquivos e descrições
 
-######################################################################################################
+    ######################################################################################################
 
-'./requirements/'
--Descrição
---Contém uma lista dos pacotes e versões instalados
+    './requirements/': diretório
+        Descrição
+            Contém uma lista dos pacotes e versões instalados
 
-'requirements.txt'
--Descrição
---Contém a lista de pacotes instalados para ambiente virtual (dir './envs')
+        'bio-env.txt': texto
+            Descrição
+                Pode ser usado para criar um ambiente Conda já instalando as dependências necessárias
 
-'bio-env.txt'
--Descrição
---Pode ser usado para criar um ambiente Conda já instalando as dependências necessárias
+        'requirements.txt': texto
+            Descrição
+                Contém a lista de pacotes instalados para ambiente virtual (dir './envs')
 
-######################################################################################################
+    ######################################################################################################
 
-'./envs/'
--Descrição
---Contém os arquivos instalados de ambiente virtual
+    'main.py': script
+        Descrição
+            Executa a UI para receber o usuário e selecionar o modo' desejado
+            Uma vez escolhida a funcionalidade, roda a função adequada para resolver o problema
+            Executa o script, retorna as informações pertinentes e volta ao menu de início
+            Termina quando o usuário escolhe encerrar
 
-######################################################################################################
+        Dependências
+            Módulo 'custom_functions'
 
-'main.py'
+    ######################################################################################################
 
--Descrição
---Executa a UI para receber o usuário e selecionar o modo desejado
---Uma vez escolhida a funcionalidade, roda a função adequada para resolver o problema
---Executa o script adequado, retorna as informações pertinentes, e volta ao menu de início
---Termina quando o usuário escolhe encerrar
+    'custom_functions.py': módulo
+        Descrição
+            Contém todas funções utilizadas para os cálculos envolvidos no exercício-programa
 
--Dependências:
---'custom_functions'
-
-######################################################################################################
-'custom_functions.py'
--Descrição
---Contém todas funções utilizadas para os cálculos envolvidos no exercício-programa
-
-######################################################################################################
+    ######################################################################################################
