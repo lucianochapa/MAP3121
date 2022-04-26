@@ -3,33 +3,39 @@
 ## Instituto de Matemática e Estatística - Departamento de Matemática Aplicada
 ## Escola Politécnica
 # MAP3121 - Métodos Numéricos e Aplicações - 2022.1
-## Exercício-programa 01
+## Exercício-programa 01: Executável principal
 # Autoria
 ## Bruno Prasinos Bernal
 ## Luciano Chaparin Luisi
 
 
-## Importação de libs
-import numpy as np, custom_functions as cf, tkinter
+import numpy as np
+# Módulo próprio contendo funções customizadas para o EP
+import custom_functions as cf
+# Usado para selecionar arquivos .csv a partir do explorador
+import tkinter
 from tkinter import filedialog
 # from math import cos, pi
 # import matplotlib.pyplot as plt
 # import sys, time, datetime, os
 
 def main():
-    while True:                                                                                                                 # Abre um laço e um nível de menu
-        options = {                                                                                                             # Cria um menu de opções como dict
+    # Abre um laço e um nível de menu
+    while True:
+        # Cria um menu de opções como dict
+        options = {
             1: 'Decomposição LU de matriz',
             2: 'Resolução de sistema tridiagonal usando decomposição LU de matriz',
             3: 'Resolução de sistema tridiagonal cíclico'
             }
-        options = cf.printMenu(options=options, name="MENU PRINCIPAL")                                                          # Imprime o menu e retorna um dict com as opções
+        # Imprime o menu e retorna um dict com as opções
+        options = cf.printMenu(options=options, name="MENU PRINCIPAL")
         try: choice = int(input("Escolha a ação desejada (1 a %i): "%(len(options))))                                           # Recebe do usuário uma ação do menu (int)
         except ValueError: print("Opção não disponível. Escolha um método do menu abaixo: ")                                    # Imprime mensagem de erro
         else:
             try: options[choice]                                                                                                # Verifica se a opção é válida
             except KeyError: print("Opção não disponível. Escolha a ação desejada do menu abaixo: ")                            # Imprime mensagem de erro
-            else:                                                                                                               # Se for válida
+            else:
                 print("Opção escolhida: %s"%(options[choice]))                                                                  # Imprime a descrição da ação escolhida
                 if(choice == 1):                                                                                                # Se escolheu decomp LU
                     while True:                                                                                                 # Abre um laço e um nível de menu
@@ -44,7 +50,7 @@ def main():
                         else:
                             try: options[choice]                                                                                # Verifica se a opção é válida
                             except KeyError: print("Opção não disponível. Escolha um método do menu abaixo: ")                  # Imprime mensagem de erro
-                            else:                                                                                               # Se for válida
+                            else:
                                 print("Opção escolhida: %s"%(options[choice]))                                                  # Imprime a descrição da ação escolhida
                                 if(choice == 1):                                                                                # Se escolheu entrada manual
                                     A = cf.recebeMatriz()                                                                       # Roda função para receber os valores um a um
@@ -67,7 +73,7 @@ def main():
                                     break                                                                                       # Quebra o laço e volta ao menu anterior
                                 else:                                                                                           # Se escolheu encerrar o programa
                                     return                                                                                      # Encerra o programa
-                                try: A
+                                try: A                                                                                          # Verifica se a variável foi definida
                                 except NameError: pass
                                 else:
                                     L, U = cf.decompLU(A)                                                                       # Executa script de decomposição LU
@@ -86,7 +92,7 @@ def main():
                             3: 'Voltar'
                             }
                         options = cf.printMenu(options=options, name="SIS TRIDI - MÉTODO DE ENTRADA")                           # Imprime o menu e retorna um dict com as opções
-                        try: choice = int(input("Escolha um método de entrada (1 a %i): "%(len(options))))                      # Recebe do usuário uma ação do menu (int)
+                        try: choice = int(input("Escolha um método de entrada (1 a %i): "%(len(options))))                      # Recebe do usuário uma ação do menu
                         except ValueError: print("Opção não disponível. Escolha um método do menu abaixo: ")                    # Imprime mensagem de erro
                         else:
                             try: options[choice]                                                                                # Verifica se a opção é válida
@@ -101,7 +107,7 @@ def main():
                                             3: 'Voltar'
                                             }
                                         options = cf.printMenu(options=options, name="SIS TRIDI - MATRIZ A E VETOR D - MÉTODO DE ENTRADA")  # Imprime o menu e retorna um dict com as opções
-                                        try: choice = int(input("Escolha um método de entrada (1 a %i): "%(len(options))))      # Recebe do usuário uma ação do menu (int)
+                                        try: choice = int(input("Escolha um método de entrada (1 a %i): "%(len(options))))      # Recebe do usuário uma ação do menu
                                         except ValueError: print("Opção não disponível. Escolha um método do menu abaixo: ")    # Imprime mensagem de erro
                                         else:
                                             try: options[choice]                                                                # Verifica se a opção é válida
