@@ -1,4 +1,4 @@
-# packages in environment at C:\Users\lucia\Desktop\MAP3121\envs:
+# packages in environment at MAP3121\envs:
 #
 # Name                    Version                   Build  Channel
 ca-certificates           2022.3.29            haa95532_0  
