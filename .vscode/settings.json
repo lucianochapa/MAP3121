@@ -1,4 +1,0 @@
-{
-    "python.defaultInterpreterPath": "${workspaceRoot}\\envs\\python.exe",
-    "python.terminal.activateEnvironment": false
-}
