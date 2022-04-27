@@ -394,8 +394,6 @@ def solveCycTridi(a: np.ndarray, b: np.ndarray, c: np.ndarray, d: np.ndarray) ->
     # Anexa o penúltimo termo de 'c' ao vetor 'v' e o último termo de 'a' ao vetor 'w'
     v = np.append(v,c[n-2])
     w = np.append(w,a[n-1])
-    print('v: %s'%(v))
-    print('w: %s'%(w))
     # Resolve o sistema com a submatriz principal: Ty=d, Tz=v
     l, u = decompLUabc(np.delete(a,[0,n-1]),np.delete(b,n-1),np.delete(c,[n-1,n-2]))
     y = solveLydUxy(l,u,np.delete(c,[n-1,n-2]),np.delete(d,[n-1]))
