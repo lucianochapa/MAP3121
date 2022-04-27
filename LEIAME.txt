@@ -96,7 +96,17 @@ Arquivos e descrições
 
         'bio-env.txt': texto
             Descrição
-                Pode ser usado para criar um ambiente Conda já instalando as dependências necessárias
+                Pode ser usado para criar um ambiente Conda já instalando as dependências necessárias - win64
+                
+        'env.yml': texto
+            Descrição
+                Pode ser usado para criar um ambiente Conda já instalando as dependências necessárias, em qualquer OS
+                No diretório root do projeto, usar o comando
+                    Para criar um ambiente virtual localmente na pasta do projeto, onde `./env_name` é o nome para o ambiente
+                    $ conda env create --prefix ./env_name -f ./requirements/env.yml
+
+                    Para criar um ambiente no diretório conda, onde `env_name` é o nome para ambiente
+                    $ conda env create -f ./requirements/env.yml --name env_name
 
         'requirements.txt': texto
             Descrição
