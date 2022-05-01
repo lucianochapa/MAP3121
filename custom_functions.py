@@ -60,7 +60,7 @@ def recebeMatriz() -> np.ndarray:
                     print("Linha %i"%(i+1))
                     while True:
                         # Pede o próximo valor e concatena à lista
-                        try: matriz.append([int(input("A[%i,%i]: "%(i+1,j+1))) for j in range(0,n)])
+                        try: matriz.append([float(input("A[%i,%i]: "%(i+1,j+1))) for j in range(0,n)])
                         except ValueError: print("Inserção inválida.")
                         else: break
             return np.array(matriz, float)
@@ -86,7 +86,7 @@ def recebeVetor(tamanho: int, nome_vetor: str) -> np.ndarray:
     for i in range(0,tamanho):
         while True:
             # Pede e concatena à lista o próximo valor
-            try: vetor.append(int(input("%s[%i de %i]: "%(nome_vetor,i+1,tamanho))))
+            try: vetor.append(float(input("%s[%i de %i]: "%(nome_vetor,i+1,tamanho))))
             except ValueError: print("Inserção inválida.")
             else: break
     return np.array(vetor, float)
