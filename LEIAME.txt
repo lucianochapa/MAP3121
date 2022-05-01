@@ -19,6 +19,7 @@ Breve descrição do projeto
 ######################################################################################################
 
 Instruções de uso
+    Dependências: Python=3.7, NumPy=1.21
     Para executar o programa, o diretório deve manter a estrutura interna
     Deve-se rodar o programa a partir do diretório root: 'MAP3121'
     Executar o arquivo 'main.py'
