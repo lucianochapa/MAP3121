@@ -2,13 +2,15 @@
 ## Instituto de Matemática e Estatística - Departamento de Matemática Aplicada
 ## Escola Politécnica
 # MAP3121 - Métodos Numéricos e Aplicações - 2022.1
-## Exercício-programa 01: Módulo de funções customizadas
+## Exercício-programa: Módulo de funções customizadas
 # Autoria
 ## Bruno Prasinos Bernal
 ## Luciano Chaparin Luisi
 
 
+import csv
 from math import cos, pi
+import time
 import numpy as np
 
 # Funções para receber input do usuário
@@ -152,7 +154,7 @@ def abc2A(a: np.ndarray, b: np.ndarray, c: np.ndarray) -> np.ndarray:
     # Guarda o tamanho do vetor diagonal principal
     n = len(b)
     # Cria matriz 'A'(n por n) com zero em todas as posições
-    matriz = np.array([[0]*n]*n, float)
+    matriz = np.zeros((n,n))
     # Itera para o tamanho do vetor diagonal
     for i in range(0,n-1):
         # Recebe valores dos vetores subdiagonal 'a', diagonal 'b', sobrediagonal 'c'
@@ -184,7 +186,7 @@ def abc2cycA(a: np.ndarray, b: np.ndarray, c: np.ndarray)-> np.ndarray:
     # Guarda o tamanho do vetor diagonal
     n = len(b)
     # Cria matriz 'A'(n por n) com zero em todas as posições
-    matriz = np.array([[0]*n]*n, float)
+    matriz = np.zeros((n,n))
     matriz[0,0] = b[0]
     matriz[0,n-1] = a[0]
     matriz[n-1,0] = c[n-1]
@@ -238,7 +240,7 @@ def cycA2abc(matriz: np.ndarray) -> 'tuple[np.ndarray, np.ndarray, np.ndarray]':
     c = np.array(c, float)
     return a, b, c
 
-# Funções de cálculo do exercício-programa
+# Funções de cálculo do exercício-programa 1
 def decompLU(matriz: np.ndarray) -> 'tuple[np.ndarray, np.ndarray]':
     '''Recebe uma matriz e devolve sua decomposição LU
     
@@ -260,12 +262,12 @@ def decompLU(matriz: np.ndarray) -> 'tuple[np.ndarray, np.ndarray]':
     # Guarda o tamanho da matriz
     n = len(matriz)
     # Cria matriz 'L'(n por n) com zeros em todas as posições e transforma a lista em ndarray
-    L = np.array([[0]*n]*n, float)
+    L = np.zeros((n,n))
     # Itera para todas as linhas; todos os elementos da diagonal viram 1
     for i in range(0,n):
         L[i,i] = 1
     # Cria matriz 'U'(n por n) com zeros em todas as posições e transforma a lista em ndarray
-    U = np.array([[0]*n]*n, float)
+    U = np.zeros((n,n))
     # Itera para todas as linhas; realiza a decomposição (a exemplo das expressões 1 e 2 do enunciado)
     for i in range(0,n):
         U[i,i:] = matriz[i,i:] - np.dot(L[i,:i],U[:i,i:])
@@ -297,8 +299,8 @@ def decompLUabc(a: np.ndarray, b: np.ndarray, c: np.ndarray) -> 'tuple[np.ndarra
     # Guarda o valor do vetor diagonal
     n = len(b)
     # Cria vetores com zero em todas as posições, de tamanhos 'n-1' e 'n'
-    l = np.array([0]*(n-1), float)
-    u = np.array([0]*n, float)
+    l = np.zeros((n-1,n-1))
+    u = np.zeros((n,n))
     # Primeiro termo do vetor 'u'
     u[0] = b[0]
     # Itera ao longo do tamanho do vetor diagonal; realiza a decomposição (a exemplo das expressões do enunciado)
@@ -428,14 +430,14 @@ def solveLydUxy(l: np.ndarray, u: np.ndarray, c: np.ndarray, d: np.ndarray) -> n
     # Guarda o tamanho do sistema
     n = len(d)
     # Cria um vetor 'y' com zero em todas as posições
-    y = np.array([0]*n, float)
+    y = np.zeros(n)
     # Primeiro termo de 'y'
     y[0] = d[0]
     # Itera para o tamanho do sistema; expressão do exercício
     for i in range(1,n):
         y[i] = d[i] - l[i-1]*y[i-1]
     # Cria um vetor 'x' com zero em todas as posições
-    x = np.array([0]*n, float)
+    x = np.zeros(n)
     # Último termo de 'x'
     x[n-1] = y[n-1]/u[n-1]
     # Itera para o tamanho do sistema, do último para o primeiro termo; Expressão do exercício
@@ -465,3 +467,80 @@ def solveTridi(a: np.ndarray, b: np.ndarray, c: np.ndarray, d: np.ndarray) -> np
     
     l, u = decompLUabc(a,b,c)
     return solveLydUxy(l,u,c,d)
+
+# Funções de cálculo do exercício-programa 2
+def gaussIntegrate(f, a: float, b: float, n: int):
+    '''Integra uma função `f(x)` no intervalo `x = [a,b]` usando fórmulas de Gauss com `n` nós
+
+    Parâmetros
+    ---
+    `f`: 
+        Função de x a ser integrada
+    `a`: float
+        Limite inferior de integração
+    `b`: float
+        Limite superior de integração
+    `n`: int
+        Número de nós a ser usado
+
+    Retorna
+    ---
+    `F`: 
+        Integral calculada
+    '''    
+    
+    if n == 6:
+        x = np.array([0.2386191860831969086305017,0.6612093864662645136613996,0.9324695142031520278123016],dtype=float)
+        w = np.array([0.4679139345726910473898703,0.3607615730481386075698335,0.1713244923791703450402961],dtype=float)
+    elif n == 8:
+        x = np.array([0.1834346424956498049394761,0.5255324099163289858177390,0.7966664774136267395915539,0.9602898564975362316835609],dtype=float)
+        w = np.array([0.3626837833783619829651504,0.3137066458778872873379622,0.2223810344533744705443560,0.1012285362903762591525314],dtype=float)
+    elif n == 10:
+        x = np.array([0.1488743389816312108848260,0.4333953941292471907992659,0.6794095682990244062343274,0.8650633666889845107320967,0.9739065285171717200779640],dtype=float)
+        w = np.array([0.2955242247147528701738930,0.2692667193099963550912269,0.2190863625159820439955349,0.1494513491505805931457763,0.0666713443086881375935688],dtype=float)
+
+    inf = (b + a)/2
+    sup = inf - a
+    vectorf = np.array([f(inf + sup*xi) for xi in x])
+    negvectorf = np.array([f(inf - sup*xi) for xi in x])
+    sum = np.sum(np.multiply(w,np.add(vectorf,negvectorf)))
+    return sup*sum
+
+def gaussIntegrate2(f, a: float, b: float, n: int):
+    '''Integra uma função `f(x)` no intervalo `x = [a,b]` usando fórmulas de Gauss com `n` nós
+
+    Parâmetros
+    ---
+    `f`: 
+        Função de x a ser integrada
+    `a`: float
+        Limite inferior de integração
+    `b`: float
+        Limite superior de integração
+    `n`: int
+        Número de nós a ser usado
+
+    Retorna
+    ---
+    `F`: 
+        Integral calculada
+    '''    
+    
+    if n == 6:
+        x = np.array([0.2386191860831969086305017,0.6612093864662645136613996,0.9324695142031520278123016],dtype=float)
+        w = np.array([0.4679139345726910473898703,0.3607615730481386075698335,0.1713244923791703450402961],dtype=float)
+    elif n == 8:
+        x = np.array([0.1834346424956498049394761,0.5255324099163289858177390,0.7966664774136267395915539,0.9602898564975362316835609],dtype=float)
+        w = np.array([0.3626837833783619829651504,0.3137066458778872873379622,0.2223810344533744705443560,0.1012285362903762591525314],dtype=float)
+    elif n == 10:
+        x = np.array([0.1488743389816312108848260,0.4333953941292471907992659,0.6794095682990244062343274,0.8650633666889845107320967,0.9739065285171717200779640],dtype=float)
+        w = np.array([0.2955242247147528701738930,0.2692667193099963550912269,0.2190863625159820439955349,0.1494513491505805931457763,0.0666713443086881375935688],dtype=float)
+
+    inf = (b + a)/2
+    sup = inf - a
+    vector = inf + sup*x
+    negvector = inf - sup*x
+    vectorf = np.array(list(map(f, vector)))
+    negvectorf = np.array(list(map(f, negvector)))
+    sum = np.sum(np.multiply(w,np.add(vectorf,negvectorf)))
+    return sup*sum
