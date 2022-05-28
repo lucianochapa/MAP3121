@@ -8,9 +8,7 @@
 ## Luciano Chaparin Luisi
 
 
-import csv
 from math import cos, pi
-import time
 import numpy as np
 
 # Funções para receber input do usuário
