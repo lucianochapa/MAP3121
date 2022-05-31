@@ -8,7 +8,7 @@
 ## Luciano Chaparin Luisi
 
 
-from math import cos, pi
+# from math import cos, pi
 import numpy as np
 
 # Funções para receber input do usuário
@@ -347,12 +347,12 @@ def genSysMAP(n: int) -> 'tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]'
         a = np.append(a,(2*(i+1)-1)/(4*(i+1)))
         c = np.append(c,1-a[i])
         b = np.append(b,2)
-        d = np.append(d,cos(2*pi*((i+1)**2)/(n**2)))
+        d = np.append(d,np.cos(2*np.pi*((i+1)**2)/(n**2)))
     # Anexa os últimos elementos a cada vetor
     a = np.append(a,(2*n-1)/(2*n))
     c = np.append(c,1-a[n-1])
     b = np.append(b,2)
-    d = np.append(d,cos(2*pi))
+    d = np.append(d,np.cos(2*np.pi))
     a = np.array(a, float)
     b = np.array(b, float)
     c = np.array(c, float)
@@ -534,11 +534,11 @@ def gaussIntegrate2(f, a: float, b: float, n: int):
         x = np.array([0.1488743389816312108848260,0.4333953941292471907992659,0.6794095682990244062343274,0.8650633666889845107320967,0.9739065285171717200779640],dtype=float)
         w = np.array([0.2955242247147528701738930,0.2692667193099963550912269,0.2190863625159820439955349,0.1494513491505805931457763,0.0666713443086881375935688],dtype=float)
 
-    inf = (b + a)/2
-    sup = inf - a
-    vector = inf + sup*x
-    negvector = inf - sup*x
+    lim_inf = (b + a)/2
+    lim_sup = lim_inf - a
+    vector = lim_inf + lim_sup*x
+    negvector = lim_inf - lim_sup*x
     vectorf = np.array(list(map(f, vector)))
     negvectorf = np.array(list(map(f, negvector)))
     sum = np.sum(np.multiply(w,np.add(vectorf,negvectorf)))
-    return sup*sum
+    return lim_sup*sum

@@ -44,7 +44,7 @@ def main():
                     for n in range(6,11,2):
                         c = 0
                         d = 1
-                        def f(x): return 1
+                        def f(x): return np.cos(x)
                         # f = lambda x: 1
                         F = cf.gaussIntegrate2(f,c,d,n)
                         # I = cf.gaussIntegrate2(f(F),c,d,n)
