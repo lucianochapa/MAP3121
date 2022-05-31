@@ -297,8 +297,8 @@ def decompLUabc(a: np.ndarray, b: np.ndarray, c: np.ndarray) -> 'tuple[np.ndarra
     # Guarda o valor do vetor diagonal
     n = len(b)
     # Cria vetores com zero em todas as posições, de tamanhos 'n-1' e 'n'
-    l = np.zeros((n-1,n-1))
-    u = np.zeros((n,n))
+    l = np.zeros(n-1)
+    u = np.zeros(n)
     # Primeiro termo do vetor 'u'
     u[0] = b[0]
     # Itera ao longo do tamanho do vetor diagonal; realiza a decomposição (a exemplo das expressões do enunciado)
