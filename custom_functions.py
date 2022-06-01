@@ -497,14 +497,27 @@ def gaussIntegrate(f, a: float, b: float, n: int) -> float:
         x = np.array([0.1488743389816312108848260,0.4333953941292471907992659,0.6794095682990244062343274,0.8650633666889845107320967,0.9739065285171717200779640],dtype=float)
         w = np.array([0.2955242247147528701738930,0.2692667193099963550912269,0.2190863625159820439955349,0.1494513491505805931457763,0.0666713443086881375935688],dtype=float)
 
-    lim_inf = (b + a)/2             # (b+a)/2
-    lim_sup = lim_inf - a           # (b-a)/2
-    vector = lim_inf + lim_sup*x    # (b+a)/2 + x*(b-a)/2, em que x é um vetor np
-    negvector = lim_inf - lim_sup*x # (b+a)/2 - x*(b-a)/2, em que x é um vetor np ("duplicado" pois x só contém nós positivos)
-    vectorf = np.array(list(map(f, vector)))        # Aplica a função f ao vetor (b+a)/2 + x*(b-a)/2
-    negvectorf = np.array(list(map(f, negvector)))  # Aplica a função f ao vetor (b+a)/2 - x*(b-a)/2 ("duplicado" pois x só contém nós positivos)
-    sum = np.sum(np.multiply(w,np.add(vectorf,negvectorf)))     # Somatória dos w[i]*f(x[i]) termos, i de 0 até n
-    return sum*lim_sup
+    # Guarda novos vetores com valores negativos das abscissas
+    x = np.append(np.flip(x),-x)
+    w = np.append(np.flip(w),w)
+
+    # Transportando linearmente para os limites desejados, [-1,1] para [a,b]:
+    # # x = mt + c
+    # # a = m(-1) + c
+    # # b = m(+1) + c
+    # # c = (b+a)/2
+    # # m = (b-a)/2
+    # # x = (b-a)*t/2 + (b+a)/2
+    # # dx = (b-a)/2 dt = m dt
+    # # Mudança de variável de x para t
+    # # int[a,b](f(x))dx = int[-1,1](f(m*t+c)*m)dt = m*int[-1,1](f(m*t+c))dt = m*sum
+
+    c = (b + a)/2
+    m = c - a
+    vector = m*x + c
+    vector = np.array(list(map(f, vector)))    # Aplica a função f sobre cada elemento do vetor mx+c
+    sum = np.sum(np.multiply(w,vector))        # Somatória dos w[i]*f(x[i]) termos, i de 0 até n
+    return m*sum
 
 def gaussDoubleIntegrate(f, a: float, b: float, c: float, d: float, nx: int, ny: int) -> float:
     '''Calcula a integral dupla de uma função `f(x,y)` no intervalo `x = [a,b], y = [c(x),d(x)]` usando fórmulas de Gauss com `nx` nós em x e `ny` nós em y.

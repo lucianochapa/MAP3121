@@ -50,29 +50,30 @@ def main():
                         print("Volume de um cubo com arestas de comprimento 1")
                         print("(n=%i nós): Vol.cubo = %f"%(n,I))
                     # Volume de um teraedro com vértices (0, 0, 0), (1, 0, 0), (0, 1, 0) e (0, 0, 1)
+                    #### Problemas com intervalo de integração como função
                     for n in range(6,11,2):     # Itera para (n=6, 8 e 10) nós
                         a = 0
                         b = 1
                         c = 0
-                        d = 1
-                        #### definir a função correta de x e y para o tetraedro
-                        def f(x, y): return 1
+                        d = lambda x: 1 - x
+                        def f(x, y): return 1 - x - y
                         I = cf.gaussDoubleIntegrate(f,a,b,c,d,n,n)
                         print("Volume de um tetraedro com vértices (0,0,0), (1,0,0), (0,1,0) e (0,0,1)")
                         print("(n=%i nós): Vol.tetraedro = %f"%(n,I))
                 # Se escolheu Exemplo 2
                 elif(choice == 2):
                     #### Problemas com intervalo de integração como função
+                    # Integrar primeiro em y, depois em x
                     for n in range(6,11,2):     # Itera para (n=6, 8 e 10) nós
                         a = 0
                         b = 1
                         c = 0
                         d = lambda x: 1-x**2
-                        # def d(x): return 1-x**2
                         def f(x, y): return 1
                         I = cf.gaussDoubleIntegrate(f,a,b,c,d,n,n)
                         print("Área A do primeiro quadrante entre os eixos e a curva y = 1-x²")
                         print("(n=%i nós): Área A (Idydx)= %f"%(n,I))
+                    # Integrar primeiro em x, depois em y
                     for n in range(6,11,2):     # Itera para (n=6, 8 e 10) nós
                         a = 0
                         b = 1
