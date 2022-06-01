@@ -39,19 +39,27 @@ def main():
                 print("Opção escolhida: %s"%(options[choice]))  # Imprime a descrição da ação escolhida
                 # Se escolheu Exemplo 1
                 if(choice == 1):
-                    a = 0
-                    b = 1
-                    for n in range(6,11,2):
+                    # Volume de um cubo de arestas 1
+                    for n in range(6,11,2):     # Itera para (n=6, 8 e 10) nós
+                        a = 0
+                        b = 1
                         c = 0
                         d = 1
-                        def f(x): return np.cos(x)
-                        # f = lambda x: 1
-                        F = cf.gaussIntegrate2(f,c,d,n)
-                        # I = cf.gaussIntegrate2(f(F),c,d,n)
-                        # I = cf.gaussIntegrate2(F,a,b,n)
-                        # II = cf.gaussIntegrate2(I,a,b,n)
-                        print("n: %i"%(n))
-                        print("Volume do cubo: %f"%(F))
+                        def f(x, y): return 1
+                        I = cf.gaussDoubleIntegrate(f,a,b,c,d,n,n)
+                        print("Volume de um cubo com arestas de comprimento 1")
+                        print("(n=%i nós): Vol.cubo = %f"%(n,I))
+                    # Volume de um teraedro com vértices (0, 0, 0), (1, 0, 0), (0, 1, 0) e (0, 0, 1)
+                    for n in range(6,11,2):     # Itera para (n=6, 8 e 10) nós
+                        a = 0
+                        b = 1
+                        c = 0
+                        d = 1
+                        # definir a função de x e y para o tetraedro
+                        # def f(x, y): return 1
+                        I = cf.gaussDoubleIntegrate(f,a,b,c,d,n,n)
+                        print("Volume de um tetraedro com vértices (0,0,0), (1,0,0), (0,1,0) e (0,0,1)")
+                        print("(n=%i nós): Vol.tetraedro = %f"%(n,I))
                 # # Se escolheu Exemplo 2
                 # elif(choice == 2):
                 # # Se escolheu Exemplo 3

@@ -467,49 +467,12 @@ def solveTridi(a: np.ndarray, b: np.ndarray, c: np.ndarray, d: np.ndarray) -> np
     return solveLydUxy(l,u,c,d)
 
 # Funções de cálculo do exercício-programa 2
-def gaussIntegrate(f, a: float, b: float, n: int):
+def gaussIntegrate(f, a: float, b: float, n: int) -> float:
     '''Integra uma função `f(x)` no intervalo `x = [a,b]` usando fórmulas de Gauss com `n` nós
 
     Parâmetros
     ---
-    `f`: 
-        Função de x a ser integrada
-    `a`: float
-        Limite inferior de integração
-    `b`: float
-        Limite superior de integração
-    `n`: int
-        Número de nós a ser usado
-
-    Retorna
-    ---
-    `F`: 
-        Integral calculada
-    '''    
-    
-    if n == 6:
-        x = np.array([0.2386191860831969086305017,0.6612093864662645136613996,0.9324695142031520278123016],dtype=float)
-        w = np.array([0.4679139345726910473898703,0.3607615730481386075698335,0.1713244923791703450402961],dtype=float)
-    elif n == 8:
-        x = np.array([0.1834346424956498049394761,0.5255324099163289858177390,0.7966664774136267395915539,0.9602898564975362316835609],dtype=float)
-        w = np.array([0.3626837833783619829651504,0.3137066458778872873379622,0.2223810344533744705443560,0.1012285362903762591525314],dtype=float)
-    elif n == 10:
-        x = np.array([0.1488743389816312108848260,0.4333953941292471907992659,0.6794095682990244062343274,0.8650633666889845107320967,0.9739065285171717200779640],dtype=float)
-        w = np.array([0.2955242247147528701738930,0.2692667193099963550912269,0.2190863625159820439955349,0.1494513491505805931457763,0.0666713443086881375935688],dtype=float)
-
-    inf = (b + a)/2
-    sup = inf - a
-    vectorf = np.array([f(inf + sup*xi) for xi in x])
-    negvectorf = np.array([f(inf - sup*xi) for xi in x])
-    sum = np.sum(np.multiply(w,np.add(vectorf,negvectorf)))
-    return sup*sum
-
-def gaussIntegrate2(f, a: float, b: float, n: int):
-    '''Integra uma função `f(x)` no intervalo `x = [a,b]` usando fórmulas de Gauss com `n` nós
-
-    Parâmetros
-    ---
-    `f`: 
+    `f`: function
         Função de x a ser integrada
     `a`: float
         Limite inferior de integração
@@ -541,4 +504,34 @@ def gaussIntegrate2(f, a: float, b: float, n: int):
     vectorf = np.array(list(map(f, vector)))
     negvectorf = np.array(list(map(f, negvector)))
     sum = np.sum(np.multiply(w,np.add(vectorf,negvectorf)))
-    return lim_sup*sum
+    return sum*lim_sup
+
+def gaussDoubleIntegrate(f, a: float, b: float, c: float, d: float, nx: int, ny: int) -> float:
+    '''Calcula a integral dupla de uma função `f(x,y)` no intervalo `x = [a,b], y = [c(x),d(x)]` usando fórmulas de Gauss com `nx` nós em x e `ny` nós em y.
+
+
+    Parâmetros
+    ---
+    `f`: function
+        Função de x,y a ser integrada
+    `a`: float
+        Limite inferior de integração em x
+    `b`: float
+        Limite superior de integração em x
+    `c`: float
+        Limite inferior de integração em y
+    `d`: float
+        Limite superior de integração em y
+    `nx`: int
+        Número de nós em x a ser usado
+    `ny`: int
+        Número de nós em y a ser usado
+
+    Retorna
+    ---
+    `I`: 
+        Integral dupla calculada
+    '''
+
+    def g(x): return gaussIntegrate(lambda y: f(x, y), c, d, ny)
+    return gaussIntegrate(g, a, b, nx)
