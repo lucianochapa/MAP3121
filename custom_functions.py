@@ -9,7 +9,6 @@
 
 
 # from math import cos, pi
-from subprocess import call
 import numpy as np
 
 # Funções para receber input do usuário

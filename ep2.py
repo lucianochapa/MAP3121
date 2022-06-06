@@ -79,7 +79,7 @@ def main():
                         d = lambda y: (1-y)**(0.5)
                         def f(y, x): return 1
                         I = cf.gaussDoubleIntegrateVar(f,a,b,c,d,n)
-                        print("Área A do primeiro quadrante entre os eixos e a curva y = 1-x²")
+                        print("Área A do primeiro quadrante entre os eixos e a curva x = (1-y)**0.5")
                         print("(n=%i nós): Área A (Idxdy)= %f"%(n,I))
                 # Se escolheu Exemplo 3
                 elif(choice == 3):
