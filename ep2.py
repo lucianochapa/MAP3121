@@ -46,23 +46,21 @@ def main():
                         c = 0
                         d = 1
                         def f(x, y): return 1
-                        I = cf.gaussDoubleIntegrate(f,a,b,c,d,n,n)
+                        I = cf.gaussDoubleIntegrate(f,a,b,c,d,n)
                         print("Volume de um cubo com arestas de comprimento 1")
                         print("(n=%i nós): Vol.cubo = %f"%(n,I))
-                    # Volume de um teraedro com vértices (0, 0, 0), (1, 0, 0), (0, 1, 0) e (0, 0, 1)
-                    #### Problemas com intervalo de integração como função
+                    # Volume de um tetraedro com vértices (0, 0, 0), (1, 0, 0), (0, 1, 0) e (0, 0, 1)
                     for n in range(6,11,2):     # Itera para (n=6, 8 e 10) nós
                         a = 0
                         b = 1
                         c = 0
                         d = lambda x: 1 - x
                         def f(x, y): return 1 - x - y
-                        I = cf.gaussDoubleIntegrate(f,a,b,c,d,n,n)
+                        I = cf.gaussDoubleIntegrateVar(f,a,b,c,d,n)
                         print("Volume de um tetraedro com vértices (0,0,0), (1,0,0), (0,1,0) e (0,0,1)")
                         print("(n=%i nós): Vol.tetraedro = %f"%(n,I))
                 # Se escolheu Exemplo 2
                 elif(choice == 2):
-                    #### Problemas com intervalo de integração como função
                     # Integrar primeiro em y, depois em x
                     for n in range(6,11,2):     # Itera para (n=6, 8 e 10) nós
                         a = 0
@@ -70,7 +68,7 @@ def main():
                         c = 0
                         d = lambda x: 1-x**2
                         def f(x, y): return 1
-                        I = cf.gaussDoubleIntegrate(f,a,b,c,d,n,n)
+                        I = cf.gaussDoubleIntegrateVar(f,a,b,c,d,n)
                         print("Área A do primeiro quadrante entre os eixos e a curva y = 1-x²")
                         print("(n=%i nós): Área A (Idydx)= %f"%(n,I))
                     # Integrar primeiro em x, depois em y
@@ -80,13 +78,31 @@ def main():
                         c = 0
                         d = lambda y: (1-y)**(0.5)
                         def f(y, x): return 1
-                        I = cf.gaussDoubleIntegrate(f,a,b,c,d,n,n)
+                        I = cf.gaussDoubleIntegrateVar(f,a,b,c,d,n)
                         print("Área A do primeiro quadrante entre os eixos e a curva y = 1-x²")
                         print("(n=%i nós): Área A (Idxdy)= %f"%(n,I))
-                # # Se escolheu Exemplo 3
-                # elif(choice == 3):  
-                # # Se escolheu Exemplo 4
-                # elif(choice == 4):
+                # Se escolheu Exemplo 3
+                elif(choice == 3):
+                    for n in range(6,11,2):     # Itera para (n=6, 8 e 10) nós
+                        a = 0.1
+                        b = 0.5
+                        c = lambda x: x**3
+                        d = lambda x: x**2
+                        def f(x, y): return (np.exp(y/x)**2 + np.exp(y/x)**2 + 1)**0.5
+                        I = cf.gaussDoubleIntegrateVar(f,a,b,c,d,n)
+                        print("Área da superfície descrita por z = exp(y/x)")
+                        print("(n=%i nós): Área A= %f"%(n,I))
+                # Se escolheu Exemplo 4
+                elif(choice == 4):
+                    for n in range(6,11,2):     # Itera para (n=6, 8 e 10) nós
+                        a = -1
+                        b = 1
+                        c = 0
+                        d = lambda y: np.exp(-y**2)
+                        def f(x, y): return (x**2 + y**2)**0.5
+                        I = 2*np.pi*cf.gaussDoubleIntegrateVar(f,a,b,c,d,n)
+                        print("Volume da calota esférica")
+                        print("(n=%i nós): V= %f"%(n,I))
                 # Se escolheu sair
                 else:
                     return

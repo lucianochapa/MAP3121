@@ -9,6 +9,7 @@
 
 
 # from math import cos, pi
+from subprocess import call
 import numpy as np
 
 # Funções para receber input do usuário
@@ -467,16 +468,16 @@ def solveTridi(a: np.ndarray, b: np.ndarray, c: np.ndarray, d: np.ndarray) -> np
     return solveLydUxy(l,u,c,d)
 
 # Funções de cálculo do exercício-programa 2
-def gaussIntegrate(f, a: float, b: float, n: int) -> float:
+def gaussIntegrate(f, a, b, n: int) -> float:
     '''Integra uma função `f(x)` no intervalo `x = [a,b]` usando fórmulas de Gauss com `n` nós
 
     Parâmetros
     ---
     `f`: function
         Função de x a ser integrada
-    `a`: float
+    `a`: float or callable
         Limite inferior de integração
-    `b`: float
+    `b`: float or callable
         Limite superior de integração
     `n`: int
         Número de nós a ser usado
@@ -502,25 +503,20 @@ def gaussIntegrate(f, a: float, b: float, n: int) -> float:
     w = np.append(np.flip(w),w)
 
     # Transportando linearmente para os limites desejados, [-1,1] para [a,b]:
-    # # x = mt + c
-    # # a = m(-1) + c
-    # # b = m(+1) + c
-    # # c = (b+a)/2
-    # # m = (b-a)/2
     # # x = (b-a)*t/2 + (b+a)/2
-    # # dx = (b-a)/2 dt = m dt
+    # # dx = (b-a)/2 dt
     # # Mudança de variável de x para t
-    # # int[a,b](f(x))dx = int[-1,1](f(m*t+c)*m)dt = m*int[-1,1](f(m*t+c))dt = m*sum
+    # # int[a,b](f(x))dx = int[-1,1](f(((b-a)/2)*t+((b+a)/2))*((b-a)/2))dt = (b-a)/2)*int[-1,1](f(((b-a)/2))*t+((b+a)/2))))dt = ((b-a)/2))*sum[i,n](w[i]*f(((b-a)/2))*x[i]+(b+a)/2)))
 
-    c = (b + a)/2
-    m = c - a
-    vector = m*x + c
-    vector = np.array(list(map(f, vector)))    # Aplica a função f sobre cada elemento do vetor mx+c
-    sum = np.sum(np.multiply(w,vector))        # Somatória dos w[i]*f(x[i]) termos, i de 0 até n
-    return m*sum
+    A = np.array(list(map(a,x))) if callable(a) else a
+    B = np.array(list(map(b,x))) if callable(b) else b
+    x = ((B-A)/2)*x + ((B+A)/2)
+    f = np.array(list(map(f, x)))   # Aplica a função f sobre cada elemento do vetor m*t+c
+    soma = np.sum(np.multiply(w,f)) # Somatória dos w[i]*f(x[i]) termos, i de 0 até n
+    return ((B-A)/2)*soma
 
-def gaussDoubleIntegrate(f, a: float, b: float, c: float, d: float, nx: int, ny: int) -> float:
-    '''Calcula a integral dupla de uma função `f(x,y)` no intervalo `x = [a,b], y = [c(x),d(x)]` usando fórmulas de Gauss com `nx` nós em x e `ny` nós em y.
+def gaussDoubleIntegrate(f, a, b, c, d, n: int) -> float:
+    '''Calcula a integral dupla de uma função `f(x,y)` no intervalo `x = [a,b], y = [c(x),d(x)]` usando fórmulas de Gauss com `n` nós.
 
 
     Parâmetros
@@ -531,14 +527,12 @@ def gaussDoubleIntegrate(f, a: float, b: float, c: float, d: float, nx: int, ny:
         Limite inferior de integração em x
     `b`: float
         Limite superior de integração em x
-    `c`: float
+    `c`: float or callable
         Limite inferior de integração em y
-    `d`: float
+    `d`: float or callable
         Limite superior de integração em y
-    `nx`: int
-        Número de nós em x a ser usado
-    `ny`: int
-        Número de nós em y a ser usado
+    `n`: int
+        Número de nós a ser usado
 
     Retorna
     ---
@@ -546,5 +540,52 @@ def gaussDoubleIntegrate(f, a: float, b: float, c: float, d: float, nx: int, ny:
         Integral dupla calculada
     '''
 
-    def g(x): return gaussIntegrate(lambda y: f(x, y), c, d, ny)
-    return gaussIntegrate(g, a, b, nx)
+    def g(x): return gaussIntegrate(lambda y: f(x, y), c, d, n)
+    return gaussIntegrate(g, a, b, n)
+
+def gaussDoubleIntegrateVar(f, a, b, c, d, n: int,) -> float:
+    '''Calcula a integral dupla de uma função `f(x,y)` no intervalo `x = [a,b], y = [c(x),d(x)]` entre curvas usando fórmulas de Gauss com `n` nós.
+
+
+    Parâmetros
+    ---
+    `f`: function
+        Função de x,y a ser integrada
+    `a`: float
+        Limite inferior de integração em x
+    `b`: float
+        Limite superior de integração em x
+    `c`: float or callable
+        Limite inferior de integração em y
+    `d`: float or callable
+        Limite superior de integração em y
+    `n`: int
+        Número de nós a ser usado
+
+    Retorna
+    ---
+    `I`: 
+        Integral dupla calculada
+    '''
+
+    if n == 6:
+        x = np.array([0.2386191860831969086305017,0.6612093864662645136613996,0.9324695142031520278123016],dtype=float)
+        w = np.array([0.4679139345726910473898703,0.3607615730481386075698335,0.1713244923791703450402961],dtype=float)
+    elif n == 8:
+        x = np.array([0.1834346424956498049394761,0.5255324099163289858177390,0.7966664774136267395915539,0.9602898564975362316835609],dtype=float)
+        w = np.array([0.3626837833783619829651504,0.3137066458778872873379622,0.2223810344533744705443560,0.1012285362903762591525314],dtype=float)
+    elif n == 10:
+        x = np.array([0.1488743389816312108848260,0.4333953941292471907992659,0.6794095682990244062343274,0.8650633666889845107320967,0.9739065285171717200779640],dtype=float)
+        w = np.array([0.2955242247147528701738930,0.2692667193099963550912269,0.2190863625159820439955349,0.1494513491505805931457763,0.0666713443086881375935688],dtype=float)
+
+    # Guarda novos vetores com valores negativos das abscissas
+    x = np.append(np.flip(x),-x)
+    w = np.append(np.flip(w),w)
+
+    soma = 0
+    for i in range(len(x)):
+        C = c(x[i]) if callable(c) else c
+        D = d(x[i]) if callable(d) else d
+        F = gaussIntegrate(lambda y: f(x[i],y),C,D,n)
+        soma += w[i]*F
+    return ((b-a)/2)*soma
