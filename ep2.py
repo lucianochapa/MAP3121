@@ -88,7 +88,7 @@ def main():
                         b = 0.5
                         c = lambda x: x**3
                         d = lambda x: x**2
-                        def f(x, y): return (np.exp(y/x)**2 + np.exp(y/x)**2 + 1)**0.5
+                        def f(x, y): return ((np.exp(y/x)*(-y/x**2))**2 + (np.exp(y/x)/x)**2 + 1)**0.5
                         I = cf.gaussDoubleIntegrateVar(f,a,b,c,d,n)
                         print("Área da superfície descrita por z = exp(y/x)")
                         print("(n=%i nós): Área A= %f"%(n,I))

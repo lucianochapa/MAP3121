@@ -581,10 +581,31 @@ def gaussDoubleIntegrateVar(f, a, b, c, d, n: int,) -> float:
     x = np.append(np.flip(x),-x)
     w = np.append(np.flip(w),w)
 
-    soma = 0
+    # soma = 0
+    # for i in range(len(x)):
+    #     C = c(x[i]) if callable(c) else c
+    #     D = d(x[i]) if callable(d) else d
+    #     F = gaussIntegrate(lambda y: f(x[i],y),C,D,n)
+    #     soma += w[i]*F
+    soma2 = 0
     for i in range(len(x)):
-        C = c(x[i]) if callable(c) else c
-        D = d(x[i]) if callable(d) else d
-        F = gaussIntegrate(lambda y: f(x[i],y),C,D,n)
-        soma += w[i]*F
-    return ((b-a)/2)*soma
+        xi = ((b-a)/2)*x[i] + ((b+a)/2)
+        C = c(xi) if callable(c) else c
+        D = d(xi) if callable(d) else d
+        soma1 = 0
+        for j in range(len(x)):
+            yij = ((D-C)/2)*x[j] + ((D+C)/2)
+            soma1 += f(xi, yij)*w[j]
+        soma1 = ((D-C)/2)*soma1
+        soma2 += soma1*w[i]
+    soma2 = ((b-a)/2)*soma2
+    return soma2
+
+n = 6
+a = 0.1
+b = 0.5
+c = lambda x: x**3
+d = lambda x: x**2
+def f(x, y): return ((np.exp(y/x)*(-y/x**2))**2 + (np.exp(y/x)/x)**2 + 1)**0.5
+I = gaussDoubleIntegrateVar(f,a,b,c,d,n)
+print(I)
