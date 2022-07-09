@@ -56,7 +56,7 @@ def main():
                         c = 0
                         d = lambda x: 1 - x
                         def f(x, y): return 1 - x - y
-                        I = cf.gaussDoubleIntegrateVar(f,a,b,c,d,n)
+                        I = cf.gaussDoubleIntegrate(f,a,b,c,d,n)
                         print("Volume de um tetraedro com vértices (0,0,0), (1,0,0), (0,1,0) e (0,0,1)")
                         print("(n=%i nós): Vol.tetraedro = %f"%(n,I))
                 # Se escolheu Exemplo 2
@@ -68,7 +68,7 @@ def main():
                         c = 0
                         d = lambda x: 1-x**2
                         def f(x, y): return 1
-                        I = cf.gaussDoubleIntegrateVar(f,a,b,c,d,n)
+                        I = cf.gaussDoubleIntegrate(f,a,b,c,d,n)
                         print("Área A do primeiro quadrante entre os eixos e a curva y = 1-x²")
                         print("(n=%i nós): Área A (Idydx)= %f"%(n,I))
                     # Integrar primeiro em x, depois em y
@@ -78,7 +78,7 @@ def main():
                         c = 0
                         d = lambda y: (1-y)**(0.5)
                         def f(y, x): return 1
-                        I = cf.gaussDoubleIntegrateVar(f,a,b,c,d,n)
+                        I = cf.gaussDoubleIntegrate(f,a,b,c,d,n)
                         print("Área A do primeiro quadrante entre os eixos e a curva x = (1-y)**0.5")
                         print("(n=%i nós): Área A (Idxdy)= %f"%(n,I))
                 # Se escolheu Exemplo 3
@@ -89,7 +89,7 @@ def main():
                         c = lambda x: x**3
                         d = lambda x: x**2
                         def f(x, y): return ((np.exp(y/x)*(-y/x**2))**2 + (np.exp(y/x)/x)**2 + 1)**0.5
-                        I = cf.gaussDoubleIntegrateVar(f,a,b,c,d,n)
+                        I = cf.gaussDoubleIntegrate(f,a,b,c,d,n)
                         print("Área da superfície descrita por z = exp(y/x)")
                         print("(n=%i nós): Área A= %f"%(n,I))
                 # Se escolheu Exemplo 4
@@ -100,7 +100,7 @@ def main():
                         c = 0
                         d = lambda y: np.exp(-y**2)
                         def f(x, y): return (x**2 + y**2)**0.5
-                        I = 2*np.pi*cf.gaussDoubleIntegrateVar(f,a,b,c,d,n)
+                        I = 2*np.pi*cf.gaussDoubleIntegrate(f,a,b,c,d,n)
                         print("Volume da calota esférica")
                         print("(n=%i nós): V= %f"%(n,I))
                 # Se escolheu sair

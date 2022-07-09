@@ -507,14 +507,11 @@ def gaussIntegrate(f, a, b, n: int) -> float:
     # # Mudança de variável de x para t
     # # int[a,b](f(x))dx = int[-1,1](f(((b-a)/2)*t+((b+a)/2))*((b-a)/2))dt = (b-a)/2)*int[-1,1](f(((b-a)/2))*t+((b+a)/2))))dt = ((b-a)/2))*sum[i,n](w[i]*f(((b-a)/2))*x[i]+(b+a)/2)))
 
-    A = np.array(list(map(a,x))) if callable(a) else a
-    B = np.array(list(map(b,x))) if callable(b) else b
-    x = ((B-A)/2)*x + ((B+A)/2)
-    f = np.array(list(map(f, x)))   # Aplica a função f sobre cada elemento do vetor m*t+c
-    soma = np.sum(np.multiply(w,f)) # Somatória dos w[i]*f(x[i]) termos, i de 0 até n
-    return ((B-A)/2)*soma
+    x = ((b-a)/2)*x + ((b+a)/2)
+    soma = np.sum(np.multiply(w,f(x))) # Somatória dos w[i]*f(x[i]) termos, i de 0 até n
+    return ((b-a)/2)*soma
 
-def gaussDoubleIntegrate(f, a, b, c, d, n: int) -> float:
+def gaussDoubleIntegrate(f, a, b, c, d, n: int,) -> float:
     '''Calcula a integral dupla de uma função `f(x,y)` no intervalo `x = [a,b], y = [c(x),d(x)]` usando fórmulas de Gauss com `n` nós.
 
 
@@ -527,37 +524,9 @@ def gaussDoubleIntegrate(f, a, b, c, d, n: int) -> float:
     `b`: float
         Limite superior de integração em x
     `c`: float or callable
-        Limite inferior de integração em y
+        Limite inferior de integração em y; pode ser uma função de x
     `d`: float or callable
-        Limite superior de integração em y
-    `n`: int
-        Número de nós a ser usado
-
-    Retorna
-    ---
-    `I`: 
-        Integral dupla calculada
-    '''
-
-    def g(x): return gaussIntegrate(lambda y: f(x, y), c, d, n)
-    return gaussIntegrate(g, a, b, n)
-
-def gaussDoubleIntegrateVar(f, a, b, c, d, n: int,) -> float:
-    '''Calcula a integral dupla de uma função `f(x,y)` no intervalo `x = [a,b], y = [c(x),d(x)]` entre curvas usando fórmulas de Gauss com `n` nós.
-
-
-    Parâmetros
-    ---
-    `f`: function
-        Função de x,y a ser integrada
-    `a`: float
-        Limite inferior de integração em x
-    `b`: float
-        Limite superior de integração em x
-    `c`: float or callable
-        Limite inferior de integração em y
-    `d`: float or callable
-        Limite superior de integração em y
+        Limite superior de integração em y; pode ser uma função de x
     `n`: int
         Número de nós a ser usado
 
@@ -580,32 +549,13 @@ def gaussDoubleIntegrateVar(f, a, b, c, d, n: int,) -> float:
     # Guarda novos vetores com valores negativos das abscissas
     x = np.append(np.flip(x),-x)
     w = np.append(np.flip(w),w)
-
-    # soma = 0
-    # for i in range(len(x)):
-    #     C = c(x[i]) if callable(c) else c
-    #     D = d(x[i]) if callable(d) else d
-    #     F = gaussIntegrate(lambda y: f(x[i],y),C,D,n)
-    #     soma += w[i]*F
-    soma2 = 0
-    for i in range(len(x)):
-        xi = ((b-a)/2)*x[i] + ((b+a)/2)
-        C = c(xi) if callable(c) else c
-        D = d(xi) if callable(d) else d
-        soma1 = 0
-        for j in range(len(x)):
-            yij = ((D-C)/2)*x[j] + ((D+C)/2)
-            soma1 += f(xi, yij)*w[j]
-        soma1 = ((D-C)/2)*soma1
-        soma2 += soma1*w[i]
-    soma2 = ((b-a)/2)*soma2
-    return soma2
-
-n = 6
-a = 0.1
-b = 0.5
-c = lambda x: x**3
-d = lambda x: x**2
-def f(x, y): return ((np.exp(y/x)*(-y/x**2))**2 + (np.exp(y/x)/x)**2 + 1)**0.5
-I = gaussDoubleIntegrateVar(f,a,b,c,d,n)
-print(I)
+    
+    x = ((b-a)/2)*x + ((b+a)/2)         # Cria um novo vetor x2 para contrair e transportar os limites de integração em y
+    C = c(x) if callable(c) else c      # Vetor dos valores mínimos
+    D = d(x) if callable(d) else d      # Vetor dos valores máximos
+    soma = 0
+    for i in range(n):                                  # Itera para o número de nós
+        inf = C[i] if hasattr(C, "__len__") else C      # Garante que o limite inferior seja um valor e não um vetor
+        sup = D[i] if hasattr(D, "__len__") else D      # Garante que o limite superior seja um valor e não um vetor
+        soma += gaussIntegrate(lambda y: f(x[i],y),inf,sup,n)*w[i]  # Integra para cada valor de x[i], pondera e adiciona à `soma`
+    return soma*(b-a)/2
