@@ -547,7 +547,7 @@ def gaussDoubleIntegrate(f, a, b, c, d, n: int,) -> float:
         w = np.array([0.2955242247147528701738930,0.2692667193099963550912269,0.2190863625159820439955349,0.1494513491505805931457763,0.0666713443086881375935688],dtype=float)
 
     # Guarda novos vetores com valores negativos das abscissas
-    x = np.append(np.flip(x),-x)
+    x = np.append(np.flik(x),-x)
     w = np.append(np.flip(w),w)
     
     x = ((b-a)/2)*x + ((b+a)/2)         # Cria um novo vetor x2 para contrair e transportar os limites de integração em y
@@ -559,3 +559,152 @@ def gaussDoubleIntegrate(f, a, b, c, d, n: int,) -> float:
         sup = D[i] if hasattr(D, "__len__") else D      # Garante que o limite superior seja um valor e não um vetor
         soma += gaussIntegrate(lambda y: f(x[i],y),inf,sup,n)*w[i]  # Integra para cada valor de x[i], pondera e adiciona à `soma`
     return soma*(b-a)/2
+
+# # Funções de cálculo do exercício-programa 3
+
+# # Recebe o valor de n
+# n = 7
+# # n = 15
+# # n = 31
+# # n = 63
+# # n = 9     # Livro Burden Faires
+
+# # Calcula valor de h
+# h = 1/(n+1)
+
+# # Calcula as abcissas dos nós
+# xi = np.array([i*h for i in range(n+2)], float)
+
+# # Calcula as funções chapéu
+# # fi = np.array([], float)
+# ########################################################
+# # fi = lambda x: (xi[1:n+1] - x)/h
+# ########################################################
+# # print(xi)
+# # print(fi(1))
+# # fi = np.append(fi, 0)
+# # for i in range(1,n+1):
+# #     fi = np.append(fi, lambda x: (xi[i+1] - x)/h)
+# # fi = np.append(fi, 0)
+
+# # def f(x): return 2*(np.pi**2)*np.sin(np.pi*x) # Livro Burden Faires
+# # def q(x): return np.pi**2                     # Livro Burden Faires
+# # def k(x): return 1                            # Livro Burden Faires
+# def f(x): return 12*x*(1-x)-2
+# def q(x): return 0
+# def k(x): return 1
+# Q1, Q2, Q3, Q4, Q5, Q6 = (np.array([], float) for _ in range(6))
+# for i in range(1, n+1):
+#     Q1 = np.append(Q1,gaussIntegrate(lambda x: ((xi[i+1]-x)/h)*((x-xi[i])/h)*q(x),xi[i],xi[i+1],10))
+#     Q2 = np.append(Q2,gaussIntegrate(lambda x: (((x-xi[i-1])/h)**2)*q(x),xi[i-1],xi[i],10))
+#     Q3 = np.append(Q3,gaussIntegrate(lambda x: (((xi[i+1]-x)/h)**2)*q(x),xi[i],xi[i+1],10))
+#     Q4 = np.append(Q4,gaussIntegrate(lambda x: (1/h)*(1/h)*k(x),xi[i-1],xi[i],10))
+#     Q5 = np.append(Q5,gaussIntegrate(lambda x: ((x-xi[i-1])/h)*(f(x)),xi[i-1],xi[i],10))
+#     Q6 = np.append(Q6,gaussIntegrate(lambda x: ((xi[i+1]-x)/h)*(f(x)),xi[i],xi[i+1],10))
+
+# # Resolve o sistema A*x = d
+# diagonal, sobrediagonal, subdiagonal, independentes = (np.array([], float) for _ in range(4))
+# diagonal = np.append(diagonal, Q4[0]+Q4[1]+Q2[0]+Q3[0])
+# sobrediagonal = np.append(sobrediagonal, -Q4[1]+Q1[0])
+# independentes = np.append(independentes, Q5[0]+Q6[0])
+# for i in range(1, n-1):
+#     diagonal = np.append(diagonal, Q4[i]+Q4[i+1]+Q2[i]+Q3[i])
+#     sobrediagonal = np.append(sobrediagonal, -Q4[i+1]+Q1[i])
+#     subdiagonal = np.append(subdiagonal, -Q4[i]+Q1[i-1])
+#     independentes = np.append(independentes, Q5[i]+Q6[i])
+# diagonal = np.append(diagonal, Q4[n-2]+Q4[n-1]+Q2[n-1]+Q3[n-1])
+# subdiagonal = np.append(subdiagonal, -Q4[n-1]+Q1[n-2])
+# independentes = np.append(independentes, Q5[n-1]+Q6[n-1])
+# solucao = solveTridi(subdiagonal,diagonal,sobrediagonal,independentes)
+
+
+# def y(x): return (x**2)*((1-x)**2)
+# # def y(x): return np.sin(np.pi*x)  # Livro Burden Faires
+# yi = np.array([], float)
+# # print(xi)
+# for i in range(0,n):
+#     yi = np.append(yi, y(xi[i+1]))
+# # print(yi)
+
+# # print(solucao-yi)
+# # print(solucao)
+# print(max(abs(solucao-yi)))
+
+# n = 7
+# 6.938893903907228e-18
+# n = 15
+# 6.938893903907228e-18
+# n = 31
+# 1.8041124150158794e-16
+# n = 63
+# 5.689893001203927e-16
+
+def solveElemFinitos(f, n: int, q = lambda x: 0, k = lambda x: 1) -> 'tuple[np.ndarray, np.ndarray]':
+    '''Resolve uma equação do tipo `L(u(x)) := (-k(x)u'(x))' + q(x)u(x) = f(x)`, para `x em [0,1]`, com `u(0) = u(1) = 0`, em `n` nós uniformemente espaçados.
+
+
+    Parâmetros
+    ---
+    `f`: function
+        Função `f(x)` da equação
+    `n`: int
+        Número de nós a ser usado
+    `q`: function
+        Função `q(x)` da equação, vale `0` por padrão se não declarado
+    `k`: function
+        Função `q(x)` da equação, valor `1` por padrão se não declarado
+
+    Retorna
+    ---
+    tuple [
+        `xi`: ndarray
+            Vetor dos valores das abscissas dos nós
+        `u`: ndarray
+            Vetor de soluções `u(x)` para cada `x[i]`, exceto nas extremidades
+    ]
+    '''
+
+    h = 1/(n+1)                                         # Calcula valor de h
+    xi = np.array([i*h for i in range(n+2)], float)     # Calcula o valor das abcissas dos nós
+    
+    # Calcula os produtos internos de f com cada função chapéu, e entre as funções chapéu, utilizando função de integração numérica do EP2
+    Q1, Q2, Q3, Q4, Q5, Q6 = (np.array([], float) for _ in range(6))    # Cria listas para receber os valores
+    for i in range(1, n+1):
+        Q1 = np.append(Q1,gaussIntegrate(lambda x: ((xi[i+1]-x)/h)*((x-xi[i])/h)*q(x),xi[i],xi[i+1],10))
+        Q2 = np.append(Q2,gaussIntegrate(lambda x: (((x-xi[i-1])/h)**2)*q(x),xi[i-1],xi[i],10))
+        Q3 = np.append(Q3,gaussIntegrate(lambda x: (((xi[i+1]-x)/h)**2)*q(x),xi[i],xi[i+1],10))
+        Q4 = np.append(Q4,gaussIntegrate(lambda x: (1/h)*(1/h)*k(x),xi[i-1],xi[i],10))
+        Q5 = np.append(Q5,gaussIntegrate(lambda x: ((x-xi[i-1])/h)*(f(x)),xi[i-1],xi[i],10))
+        Q6 = np.append(Q6,gaussIntegrate(lambda x: ((xi[i+1]-x)/h)*(f(x)),xi[i],xi[i+1],10))
+    
+    # Monta o sistema matricial referente à equação (8) do enunciado do exercício, da forma A*x = d
+    diagonal, sobrediagonal, subdiagonal, independentes = (np.array([], float) for _ in range(4))
+    diagonal = np.append(diagonal, Q4[0]+Q4[1]+Q2[0]+Q3[0])
+    sobrediagonal = np.append(sobrediagonal, -Q4[1]+Q1[0])
+    independentes = np.append(independentes, Q5[0]+Q6[0])
+    for i in range(1, n-1):
+        diagonal = np.append(diagonal, Q4[i]+Q4[i+1]+Q2[i]+Q3[i])
+        sobrediagonal = np.append(sobrediagonal, -Q4[i+1]+Q1[i])
+        subdiagonal = np.append(subdiagonal, -Q4[i]+Q1[i-1])
+        independentes = np.append(independentes, Q5[i]+Q6[i])
+    diagonal = np.append(diagonal, Q4[n-2]+Q4[n-1]+Q2[n-1]+Q3[n-1])
+    subdiagonal = np.append(subdiagonal, -Q4[n-1]+Q1[n-2])
+    independentes = np.append(independentes, Q5[n-1]+Q6[n-1])
+    # Resolve o sistema tridiagonal utilizando função do EP1
+    return xi, solveTridi(subdiagonal,diagonal,sobrediagonal,independentes)
+
+
+n = 9
+def f(x): return 2*(np.pi**2)*np.sin(np.pi*x) # Livro Burden Faires
+def q(x): return np.pi**2                     # Livro Burden Faires
+def k(x): return 1                            # Livro Burden Faires
+# def f(x): return 12*x*(1-x)-2
+# def q(x): return 0
+# def k(x): return 1
+xi, u = solveElemFinitos(f,n,q)
+# def solucaoExata(x): return (x**2)*((1-x)**2)
+def solucaoExata(x): return np.sin(np.pi*x)     # Livro Burden Faires
+u_bar = np.array([solucaoExata(xi[i+1]) for i in range(n)], float)
+print(u)
+print(u_bar)
+print(max(abs(u - u_bar)))
