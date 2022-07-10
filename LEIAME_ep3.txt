@@ -1,0 +1,120 @@
+Universidade de São Paulo
+    Instituto de Matemática e Estatística - Departamento de Matemática Aplicada
+    Escola Politécnica
+MAP3121 - Métodos Numéricos e Aplicações - 2022.1
+    Exercício-programa 03
+Autoria
+    Bruno Prasinos Bernal
+    Luciano Chaparin Luisi
+
+Breve descrição do projeto
+    A funcionalidade do script `ep3.py` é demonstrar 4 exemplos de uso do método de elementos finitos
+        1: 'Teste 1 - Validação: Seção 4.2 do EP3',
+        2: 'Teste 2 - Complemento Seção 4.2 do EP3',
+        3: 'Teste 3 - Forçantes de calor: Seção 4.3 do EP3',
+        4: 'Teste 4 - Ilustração Burden, Faires'
+    Sua interface de usuário é através da linha de comando, pedindo do usuário parâmetros de escolha
+    O usuário deve escolher a função que deseja executar, seguido dos parâmetros possíveis de se variar
+    O programa imprime os devidos resultados no terminal de volta ao usuário, com a possibilidade de plotar uma curva dos respectivos dados
+
+######################################################################################################
+
+Instruções de uso
+    Dependências: Python=3.7, NumPy=1.21, Matplotlib=3.5
+    Para executar o programa, o diretório deve manter a estrutura interna
+    Deve-se rodar o programa a partir do diretório root: 'MAP3121'
+    Executar o arquivo 'ep3.py'
+    Seguir as intruções na tela conforme determinação do programa
+    
+
+    Trechos de impressão do programa são indicados por três pontos
+    Trechos de inserção do usuário são indicados por três sinais de maior
+    
+        ... MENU PRINCIPAL ---------------------------------------------------- 
+        ... 1. Teste 1 - Validação: Seção 4.2 do EP3
+        ... 2. Teste 2 - Complemento Seção 4.2 do EP3
+        ... 3. Teste 3 - Forçantes de calor: Seção 4.3 do EP3
+        ... 4. Teste 4 - Ilustração Burden, Faires
+        ... 5. Encerrar programa
+        ... -------------------------------------------------------------------
+        ... Escolha a ação desejada (1 a 5):
+        >>> 1
+    
+    O exemplo acima apresenta o menu inicial que é impresso assim que o programa inicia. O usuário pode, então, selecionar um dos exemplos.
+    O programa pede ao usuário para escolher entre os parâmetros padrão ou especificá-los:
+
+        ... Opção escolhida: Teste 1 - Validação: Seção 4.2 do EP3
+        ... SEÇÃO 4.2 DO EP3 --------------------------------------------------
+        ... 1. Usar parâmetros de valor padrão: q=0, k=1, L=1, T_ext=20, nós=[7,15,31,63]
+        ... 2. Escolher valores dos parâmetros: L, T_ext, e nós
+        ... 3. Voltar
+        ... 4. Encerrar programa
+        ... -------------------------------------------------------------------
+        ... Escolha a ação desejada (1 a 4):
+        >>> 1
+
+    Escolhidos os parâmetros, o programa executa os cálculos pertinentes, retornando os resultados:
+    
+        ... Opção escolhida: Usar parâmetros de valor padrão: q=0, k=1, L=1, T_ext=20, nós=[7,15,31,63]
+        ... Para n=7 nós:
+        ... (7 nós) Abcissas: [0.    0.125 0.25  0.375 0.5   0.625 0.75  0.875 1.   ]
+        ... (7 nós) Vetor de soluções u(x): [20.         20.01196289 20.03515625 20.05493164 20.0625     20.05493164
+            20.03515625 20.01196289 20.        ]
+        ... (7 nós) Vetor de soluções exatas u_bar(x): [20.         20.01196289 20.03515625 20.05493164 20.0625     20.05493164
+            20.03515625 20.01196289 20.        ]
+        ... (7 nós) Vetor diferença absoluta u-u_bar(x): [0. 0. 0. 0. 0. 0. 0. 0. 0.]
+        ... (7 nós) Erro máximo: 0.000000
+        ... (...)
+        ... -------------------------------------------------------------------
+        ... Deseja visualizar a curva dos resultados apresentados? (S/N):
+        >>> s
+
+        Se escolher visualizar a curva com os resultados, uma nova janela (Matplotlib) será aberta.
+
+######################################################################################################
+
+Arquivos e descrições
+
+    ######################################################################################################
+
+    './requirements/': diretório
+        Descrição
+            Contém uma lista dos pacotes e versões instalados
+
+        'bio-env.txt': texto
+            Descrição
+                Pode ser usado para criar um ambiente Conda já instalando as dependências necessárias - win64
+                
+        'env.yml': texto
+            Descrição
+                Pode ser usado para criar um ambiente Conda já instalando as dependências necessárias, em qualquer OS
+                No diretório root do projeto, usar o comando
+                    Para criar um ambiente virtual localmente na pasta do projeto, onde `./env_name` é o nome para o ambiente
+                    $ conda env create --prefix ./env_name -f ./requirements/env.yml
+
+                    Para criar um ambiente no diretório conda, onde `env_name` é o nome para ambiente
+                    $ conda env create -f ./requirements/env.yml --name env_name
+
+        'requirements.txt': texto
+            Descrição
+                Contém a lista de pacotes instalados para ambiente virtual (dir './envs')
+
+    ######################################################################################################
+
+    'ep3.py': script
+        Descrição
+            Executa a UI para receber o usuário e selecionar o modo' desejado
+            Uma vez escolhida a funcionalidade, roda a função adequada para resolver o problema
+            Executa o script, retorna as informações pertinentes e volta ao menu de início
+            Termina quando o usuário escolhe encerrar
+
+        Dependências
+            Módulo 'custom_functions'
+
+    ######################################################################################################
+
+    'custom_functions.py': módulo
+        Descrição
+            Contém todas funções utilizadas para os cálculos envolvidos no exercício-programa
+
+    ######################################################################################################

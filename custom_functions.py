@@ -9,6 +9,7 @@
 
 
 # from math import cos, pi
+from typing import Optional
 import numpy as np
 
 # Funções para receber input do usuário
@@ -560,7 +561,8 @@ def gaussDoubleIntegrate(f, a, b, c, d, n: int,) -> float:
         soma += gaussIntegrate(lambda y: f(x[i],y),inf,sup,n)*w[i]  # Integra para cada valor de x[i], pondera e adiciona à `soma`
     return soma*(b-a)/2
 
-def solveElemFinitos(f, n: int, l: float = 1, q = lambda x: 0, k = lambda x: 1) -> 'tuple[np.ndarray, np.ndarray]':
+# Funções de cálculo do exercício-programa 3
+def solveElemFinitos(f, n: int, l: Optional[float] = 1, q: Optional['function'] = lambda x: 0, k: Optional['function'] = lambda x: 1, exata: Optional['function'] = None) -> 'tuple[np.ndarray, np.ndarray, np.ndarray]':
     '''Resolve uma equação do tipo `L(u(x)) := (-k(x)u'(x))' + q(x)u(x) = f(x)`, para `x em [0,1]`, com `u(0) = u(1) = 0`, em `n` nós uniformemente espaçados.
 
 
@@ -570,12 +572,14 @@ def solveElemFinitos(f, n: int, l: float = 1, q = lambda x: 0, k = lambda x: 1) 
         Função `f(x)` da equação
     `n`: int
         Número de nós a ser usado
-    `l`: int
+    `l`: float, optional
         Tamanho do intervalo em metros, vale `1` por padrão se não declarado
-    `q`: function
+    `q`: function, optional
         Função `q(x)` da equação, vale `0` por padrão se não declarado
-    `k`: function
-        Função `q(x)` da equação, valor `1` por padrão se não declarado
+    `k`: function, optional
+        Função `q(x)` da equação, vale `1` por padrão se não declarado
+    `exata`: function, optional
+        Solução exata da equação para comparação, vale `None` por padrão se não declarado
 
     Retorna
     ---
@@ -583,7 +587,9 @@ def solveElemFinitos(f, n: int, l: float = 1, q = lambda x: 0, k = lambda x: 1) 
         `xi`: ndarray
             Vetor dos valores das abscissas dos nós
         `u`: ndarray
-            Vetor de soluções `u(x)` para cada `x[i]`, exceto nas extremidades
+            Vetor de soluções `u(x)` para cada `x[i]`
+        `u_bar`: ndarray
+            Vetor de soluções exatas `u_bar(x)` para cada `x[i]``
     ]
     '''
 
@@ -593,31 +599,29 @@ def solveElemFinitos(f, n: int, l: float = 1, q = lambda x: 0, k = lambda x: 1) 
     # Calcula os produtos internos de f com cada função chapéu, e entre as funções chapéu, utilizando função de integração numérica do EP2
     Q1, Q2, Q3, Q4, Q5, Q6 = (np.array([], float) for _ in range(6))    # Cria listas para receber os valores
     for i in range(1, n+1):
-        if(i<n):
-            Q1 = np.append(Q1,gaussIntegrate(lambda x: ((xi[i+1]-x)/h)*((x-xi[i])/h)*q(x),xi[i],xi[i+1],10))
+        if(i<n): Q1 = np.append(Q1,gaussIntegrate(lambda x: ((xi[i+1]-x)/h)*((x-xi[i])/h)*q(x),xi[i],xi[i+1],10))
         Q2 = np.append(Q2,gaussIntegrate(lambda x: (((x-xi[i-1])/h)**2)*q(x),xi[i-1],xi[i],10))
         Q3 = np.append(Q3,gaussIntegrate(lambda x: (((xi[i+1]-x)/h)**2)*q(x),xi[i],xi[i+1],10))
         Q4 = np.append(Q4,gaussIntegrate(lambda x: (1/h)*(1/h)*k(x),xi[i-1],xi[i],10))
-        if(i==n+1):
-            Q4 = np.append(Q4,gaussIntegrate(lambda x: (1/h)*(1/h)*k(x),xi[i],xi[i+1],10))
+        if(i==n): Q4 = np.append(Q4,gaussIntegrate(lambda x: (1/h)*(1/h)*k(x),xi[i],xi[i+1],10))
         Q5 = np.append(Q5,gaussIntegrate(lambda x: ((x-xi[i-1])/h)*(f(x)),xi[i-1],xi[i],10))
         Q6 = np.append(Q6,gaussIntegrate(lambda x: ((xi[i+1]-x)/h)*(f(x)),xi[i],xi[i+1],10))
-    print(Q4)
 
-    
     # Monta o sistema matricial referente à equação (8) do enunciado do exercício, da forma A*x = d
-    diagonal, sobrediagonal, subdiagonal, independentes = (np.array([], float) for _ in range(4))
-    diagonal = np.append(diagonal, Q4[0]+Q4[1]+Q2[0]+Q3[0])
-    sobrediagonal = np.append(sobrediagonal, -Q4[1]+Q1[0])
-    independentes = np.append(independentes, Q5[0]+Q6[0])
-    for i in range(1, n-1):
-        diagonal = np.append(diagonal, Q4[i]+Q4[i+1]+Q2[i]+Q3[i])
-        sobrediagonal = np.append(sobrediagonal, -Q4[i+1]+Q1[i])
-        subdiagonal = np.append(subdiagonal, -Q4[i]+Q1[i-1])
-        independentes = np.append(independentes, Q5[i]+Q6[i])
-    diagonal = np.append(diagonal, Q4[n-2]+Q4[n-1]+Q2[n-1]+Q3[n-1])
-    subdiagonal = np.append(subdiagonal, -Q4[n-1]+Q1[n-2])
-    independentes = np.append(independentes, Q5[n-1]+Q6[n-1])
-    # print(abc2A(subdiagonal,diagonal,sobrediagonal))
+    subdiagonal = -Q4[1:-1] + Q1
+    diagonal = Q4[:-1] + Q4[1:] + Q2 + Q3
+    sobrediagonal = -Q4[1:-1] + Q1
+    independentes = Q5 + Q6
+
     # Resolve o sistema tridiagonal utilizando função do EP1
-    return xi, solveTridi(subdiagonal,diagonal,sobrediagonal,independentes)
+    u = solveTridi(subdiagonal,diagonal,sobrediagonal,independentes)
+    u = np.append(np.insert(u, 0, 0), 0)
+    
+    # Calcula a solução exata se foi definida
+    if(exata is not None):
+        u_bar = exata(xi[1:-1])
+        u_bar = np.append(np.insert(u_bar, 0, 0), 0)
+    else:
+        u_bar = None
+    
+    return xi, u, u_bar
