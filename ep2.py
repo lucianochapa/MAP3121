@@ -12,12 +12,6 @@
 import numpy as np
 # Módulo próprio contendo funções customizadas para o EP
 import custom_functions as cf
-# # Usado para selecionar arquivos .csv a partir do explorador
-# import tkinter
-# from tkinter import filedialog
-# from math import cos, pi
-# import matplotlib.pyplot as plt
-# import sys, time, datetime, os
 
 def main():
     # Abre um laço, imprime um menu e prompta o usuário a escolher uma opção

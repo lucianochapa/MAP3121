@@ -8,7 +8,6 @@
 ## Luciano Chaparin Luisi
 
 
-# from math import cos, pi
 from typing import Optional
 import numpy as np
 

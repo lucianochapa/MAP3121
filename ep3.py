@@ -10,14 +10,9 @@
 
 
 import numpy as np
+import matplotlib.pyplot as plt
 # Módulo próprio contendo funções customizadas para o EP
 import custom_functions as cf
-# # Usado para selecionar arquivos .csv a partir do explorador
-# import tkinter
-# from tkinter import filedialog
-# from math import cos, pi
-import matplotlib.pyplot as plt
-# import sys, time, datetime, os
 
 def main():
     # Abre um laço, imprime um menu e prompta o usuário a escolher uma opção
@@ -224,7 +219,7 @@ def main():
                                 plt.legend()
                                 plt.show()
                             break
-                elif(choice == 4):      # Teste/validação - BURDEN;FAIRES. Numerical Analysis, 10ed, cap.11, p.719-720, 2016.
+                elif(choice == 4):      # Teste/validação - BURDEN;FAIRES. Numerical Analysis, 10ed, cap.11, p.719-720, 2015.
                     while True:
                         options = {
                             1: 'Usar parâmetros de valor padrão: q=pi^2, k=1, nós=[9]',
@@ -283,4 +278,5 @@ def main():
                                 break
                 else:                   # Escolheu sair
                     return
+
 main()
